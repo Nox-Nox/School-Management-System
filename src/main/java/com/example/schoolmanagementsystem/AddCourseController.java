@@ -15,7 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class AddCourseController implements Initializable {
-	private final List<String> proList = new ArrayList<String>();
+	private final List<String> proList = new ArrayList<>();
 	@FXML
 	AnchorPane sceneAddCourse;
 	@FXML
@@ -46,7 +46,7 @@ public class AddCourseController implements Initializable {
 		}
 	}
 
-	public void submit() throws SQLException, ClassNotFoundException, InterruptedException {
+	public void submit() throws SQLException, ClassNotFoundException{
 		String courseNameField = courseName.getText();
 		String courseCodeField = courseCode.getText();
 		String profIDField = profOptions.getValue();
@@ -63,7 +63,6 @@ public class AddCourseController implements Initializable {
 
 		if (resultSet.next()) {
 			profIndex = resultSet.getInt("professor_ID");
-			System.out.println(profIndex);
 		}
 
 		String query1 = "INSERT INTO course (courseName, courseCode)" + "VALUES(?, ?)";
@@ -73,7 +72,6 @@ public class AddCourseController implements Initializable {
 		prepareStmt1.execute();
 		prepareStmt1.close();
 
-
 		String query2 = "SELECT courseID FROM course WHERE courseName = ?";
 		PreparedStatement preparedStmt2 = connectDB.prepareStatement(query2);
 		preparedStmt2.setString(1, courseNameField);
@@ -82,7 +80,6 @@ public class AddCourseController implements Initializable {
 
 		if (resultSet1.next()) {
 			courseIndex = resultSet1.getInt("courseID");
-			System.out.println(courseIndex);
 		}
 
 		String query3 = "INSERT INTO prof_course_junction (professor_ID, courseID)" + "VALUES(?, ?)";

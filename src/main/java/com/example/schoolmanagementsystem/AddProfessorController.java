@@ -54,10 +54,8 @@ public class AddProfessorController implements Initializable {
 		genderField = gender.getValue();
 		dateField = Date.from(date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 		java.sql.Date sqlDate = new java.sql.Date(dateField.getTime());
-
 		LocalDate birthday = date.getValue();
 		Period period = Period.between(birthday, LocalDate.now());
-
 		int age = period.getYears();
 
 		DBconnect dBconnect = new DBconnect();
