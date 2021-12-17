@@ -16,8 +16,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class AddModuleController implements Initializable {
-	List<String> courseList = new ArrayList<String>();
-	List<String> proList = new ArrayList<String>();
+	List<String> courseList = new ArrayList<>();
+	List<String> proList = new ArrayList<>();
 	String moduleNameField;
 	String moduleCodeField;
 
@@ -60,7 +60,7 @@ public class AddModuleController implements Initializable {
 		try {
 			DBconnect dBconnect = new DBconnect();
 			Connection connectDB = dBconnect.getConnection();
-			String query = "SELECT professor.professorID, professor.name, professor.surname FROM course INNER JOIN professor on course.professor_ID=professor.professor_ID WHERE courseCode = ?";
+			String query = "SELECT professor.professorID, professor.name, professor.surname FROM professor JOIN prof_course_junction ON (professor.professor_ID=prof_course_junction.professor_ID) JOIN course ON (course.courseID=prof_course_junction.courseID) WHERE course.courseCode = ?";
 			PreparedStatement prepareStmt = connectDB.prepareStatement(query);
 			prepareStmt.setString(1, course_code);
 			ResultSet queryOut = prepareStmt.executeQuery();
@@ -94,7 +94,7 @@ public class AddModuleController implements Initializable {
 
 		DBconnect dbConnect = new DBconnect();
 		Connection connectDB = dbConnect.getConnection();
-		String query = "SELECT course.courseID FROM course INNER JOIN professor ON course.professor_ID=professor.professor_ID WHERE professorID = ?";
+		String query = "SELECT course.courseID FROM course JOIN prof_course_junction ON (course.courseID=prof_course_junction.courseID) JOIN professor ON (professor.professor_ID=prof_course_junction.professor_ID) WHERE professorID = ?";
 		PreparedStatement prepareStmt = connectDB.prepareStatement(query);
 		prepareStmt.setString(1, prof_id);
 		ResultSet queryOut = prepareStmt.executeQuery();
