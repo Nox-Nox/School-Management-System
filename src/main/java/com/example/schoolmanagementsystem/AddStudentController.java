@@ -9,23 +9,21 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.*;
 import java.util.Date;
-import java.util.Random;
-import java.util.ResourceBundle;
 
 public class AddStudentController implements Initializable {
 	private final String[] genderOptions = { "Male", "Female", "Other" };
+	private List<String> courseOptions = new ArrayList<>();
 	Integer studentIDField;
 	String nameField;
 	String surnameField;
 	String genderField;
+	String courseIDField;
 	Date dateField;
 	@FXML
 	private TextField age;
@@ -33,6 +31,8 @@ public class AddStudentController implements Initializable {
 	private DatePicker date;
 	@FXML
 	private ChoiceBox<String> gender;
+	@FXML
+	private ChoiceBox<String> course;
 	@FXML
 	private TextField name;
 	@FXML
@@ -45,6 +45,22 @@ public class AddStudentController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		gender.getItems().addAll(genderOptions);
+		try {
+		DBconnect dBconnect = new DBconnect();
+		Connection connectDB = dBconnect.getConnection();
+		String query = "SELECT DISTINCT courseName FROM course";
+			Statement statement = connectDB.createStatement();
+			ResultSet queryOut = statement.executeQuery(query);
+
+			while (queryOut.next()){
+				courseOptions.add(queryOut.getString("courseName"));
+			}
+			course.getItems().addAll(courseOptions);
+
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public void submit() throws SQLException, ClassNotFoundException {
@@ -52,6 +68,7 @@ public class AddStudentController implements Initializable {
 		nameField = name.getText();
 		surnameField = surname.getText();
 		genderField = gender.getValue();
+		courseIDField = course.getValue();
 		dateField = Date.from(date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 		java.sql.Date sqlDate = new java.sql.Date(dateField.getTime());
 

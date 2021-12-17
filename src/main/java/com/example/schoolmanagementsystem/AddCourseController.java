@@ -46,7 +46,7 @@ public class AddCourseController implements Initializable {
 		}
 	}
 
-	public void submit() throws SQLException, ClassNotFoundException {
+	public void submit() throws SQLException, ClassNotFoundException, InterruptedException {
 		String courseNameField = courseName.getText();
 		String courseCodeField = courseCode.getText();
 		String profIDField = profOptions.getValue();
@@ -65,15 +65,32 @@ public class AddCourseController implements Initializable {
 			profIndex = resultSet.getInt("professor_ID");
 			System.out.println(profIndex);
 		}
-		resultSet.close();
 
-		String query1 = "INSERT INTO course (courseName, courseCode, professor_ID)" + "VALUES(?, ?, ?)";
+		String query1 = "INSERT INTO course (courseName, courseCode)" + "VALUES(?, ?)";
 		PreparedStatement prepareStmt1 = connectDB.prepareStatement(query1);
 		prepareStmt1.setString(1, courseNameField);
 		prepareStmt1.setString(2, courseCodeField);
-		prepareStmt1.setInt(3, profIndex);
 		prepareStmt1.execute();
 		prepareStmt1.close();
+
+
+		String query2 = "SELECT courseID FROM course WHERE courseName = ?";
+		PreparedStatement preparedStmt2 = connectDB.prepareStatement(query2);
+		preparedStmt2.setString(1, courseNameField);
+		ResultSet resultSet1 = preparedStmt2.executeQuery();
+		int courseIndex = 0;
+
+		if (resultSet1.next()) {
+			courseIndex = resultSet1.getInt("courseID");
+			System.out.println(courseIndex);
+		}
+
+		String query3 = "INSERT INTO prof_course_junction (professor_ID, courseID)" + "VALUES(?, ?)";
+		PreparedStatement prepareStmt3 = connectDB.prepareStatement(query3);
+		prepareStmt3.setInt(1, profIndex);
+		prepareStmt3.setInt(2, courseIndex);
+		prepareStmt3.execute();
+		prepareStmt3.close();
 		connectDB.close();
 		courseCode.clear();
 		courseName.clear();
