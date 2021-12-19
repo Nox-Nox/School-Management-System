@@ -113,6 +113,7 @@ public class AddStudentController implements Initializable {
 				studentID.setText(String.valueOf(ID));
 			}
 		}
+		connectDB.close();
 		studentID.setText(String.valueOf(ID));
 	}
 

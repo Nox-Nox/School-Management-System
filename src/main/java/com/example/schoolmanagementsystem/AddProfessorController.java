@@ -88,6 +88,7 @@ public class AddProfessorController implements Initializable {
 				professorID.setText(String.valueOf(ID));
 			}
 		}
+		connectDB.close();
 		professorID.setText(String.valueOf(ID));
 	}
 
