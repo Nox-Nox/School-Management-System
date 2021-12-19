@@ -99,9 +99,20 @@ public class AddStudentController implements Initializable {
 		stage.close();
 	}
 
-	public void generate() {
+	public void generate() throws SQLException, ClassNotFoundException {
 		Random random = new Random();
 		int ID = random.nextInt(99999999);
+		DBconnect dbConnect = new DBconnect();
+		Connection connectDB = dbConnect.getConnection();
+		String query = "SELECT studentID FROM student";
+		Statement statement = connectDB.createStatement();
+		ResultSet queryOut = statement.executeQuery(query);
+		while (queryOut.next()) {
+			if (queryOut.getInt("studentID") == ID) {
+				ID = random.nextInt(99999999);
+				studentID.setText(String.valueOf(ID));
+			}
+		}
 		studentID.setText(String.valueOf(ID));
 	}
 

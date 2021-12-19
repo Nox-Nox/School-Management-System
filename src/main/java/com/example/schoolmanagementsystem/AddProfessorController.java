@@ -1,9 +1,7 @@
 package com.example.schoolmanagementsystem;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -75,9 +73,21 @@ public class AddProfessorController implements Initializable {
 		stage.close();
 	}
 
-	public void generate() {
+	public void generate() throws SQLException, ClassNotFoundException {
 		Random random = new Random();
 		int ID = random.nextInt(99999);
+		professorID.setText(String.valueOf(ID));
+		DBconnect dbConnect = new DBconnect();
+		Connection connectDB = dbConnect.getConnection();
+		String query = "SELECT professorID FROM professor";
+		Statement statement = connectDB.createStatement();
+		ResultSet queryOut = statement.executeQuery(query);
+		while (queryOut.next()) {
+			if (queryOut.getInt("professorID") == ID) {
+				ID = random.nextInt(99999999);
+				professorID.setText(String.valueOf(ID));
+			}
+		}
 		professorID.setText(String.valueOf(ID));
 	}
 
