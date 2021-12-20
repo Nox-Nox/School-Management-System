@@ -2,37 +2,18 @@ package com.example.schoolmanagementsystem;
 
 import java.time.LocalDate;
 
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
 
-public class TimeTable {
-	SimpleStringProperty academicYear;
+public class AcademicYear {
 	SimpleObjectProperty startDate;
 	SimpleObjectProperty endDate;
 	SimpleStringProperty course;
-	SimpleListProperty<SimpleStringProperty> students;
 
-	public TimeTable(String academicYear, LocalDate startDate, LocalDate endDate, String course,
-			ObservableList<SimpleStringProperty> students) {
-		this.academicYear = new SimpleStringProperty(academicYear);
+	public AcademicYear(LocalDate startDate, LocalDate endDate, String course) {
 		this.startDate = new SimpleObjectProperty(startDate);
 		this.endDate = new SimpleObjectProperty(endDate);
 		this.course = new SimpleStringProperty(course);
-		this.students = new SimpleListProperty<>(students);
-	}
-
-	public String getAcademicYear() {
-		return academicYear.get();
-	}
-
-	public void setAcademicYear(String academicYear) {
-		this.academicYear.set(academicYear);
-	}
-
-	public SimpleStringProperty academicYearProperty() {
-		return academicYear;
 	}
 
 	public Object getStartDate() {
@@ -71,15 +52,4 @@ public class TimeTable {
 		return course;
 	}
 
-	public ObservableList<SimpleStringProperty> getStudents() {
-		return students.get();
-	}
-
-	public void setStudents(ObservableList<SimpleStringProperty> students) {
-		this.students.set(students);
-	}
-
-	public SimpleListProperty<SimpleStringProperty> studentsProperty() {
-		return students;
-	}
 }

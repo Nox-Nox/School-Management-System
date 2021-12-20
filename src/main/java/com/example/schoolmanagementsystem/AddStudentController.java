@@ -18,12 +18,12 @@ import java.util.Date;
 
 public class AddStudentController implements Initializable {
 	private final String[] genderOptions = { "Male", "Female", "Other" };
-	Integer studentIDField;
-	String nameField;
-	String surnameField;
-	String genderField;
-	String courseNameField;
-	Date dateField;
+	private Integer studentIDField;
+	private String nameField;
+	private String surnameField;
+	private String genderField;
+	private String courseNameField;
+	private Date dateField;
 	private List<String> courseOptions = new ArrayList<>();
 	@FXML
 	private DatePicker date;

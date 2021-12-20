@@ -22,7 +22,6 @@ public class Student {
 		this.gender = new SimpleStringProperty(gender);
 		this.age = new SimpleIntegerProperty(age);
 		this.DoB = new SimpleObjectProperty(DoB);
-
 	}
 
 	public int getStudentID() {

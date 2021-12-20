@@ -16,11 +16,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class AddModuleController implements Initializable {
-	List<String> courseList = new ArrayList<>();
-	List<String> proList = new ArrayList<>();
-	String moduleNameField;
-	String moduleCodeField;
-
+	private List<String> courseList = new ArrayList<>();
+	private List<String> proList = new ArrayList<>();
+	private String moduleNameField;
+	private String moduleCodeField;
 	@FXML
 	private ChoiceBox<String> courseOptions;
 	@FXML

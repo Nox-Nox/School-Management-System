@@ -35,7 +35,7 @@ public class DashboardController {
 	}
 
 	public void switchToSchedule(ActionEvent e) throws IOException {
-		Parent root = FXMLLoader.load(getClass().getResource("ScheduleTab.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("AcademicYearControllerTab.fxml"));
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
