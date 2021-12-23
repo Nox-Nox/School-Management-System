@@ -12,8 +12,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 public class AddAcademicYear implements Initializable {
+
 	private Date startDateField;
 	private Date endDateField;
 	private String courseField;
@@ -24,6 +27,8 @@ public class AddAcademicYear implements Initializable {
 	private DatePicker endDatePicker;
 	@FXML
 	private DatePicker startDatePicker;
+	@FXML
+	private AnchorPane sceneAddAcademicYear;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -33,13 +38,11 @@ public class AddAcademicYear implements Initializable {
 			String query = "SELECT courseName FROM course";
 			Statement statement = connectDB.createStatement();
 			ResultSet resultSet = statement.executeQuery(query);
-			while(resultSet.next()){
+			while (resultSet.next()) {
 				courses.add(resultSet.getString("courseName"));
 			}
 			courseChoiceBox.getItems().addAll(courses);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
+		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -56,8 +59,15 @@ public class AddAcademicYear implements Initializable {
 		PreparedStatement preparedStatement = connectDB.prepareStatement(query);
 		preparedStatement.setDate(1, sqlStartDate);
 		preparedStatement.setDate(2, sqlEndDate);
-		preparedStatement.setString(3,courseField);
+		preparedStatement.setString(3, courseField);
 		preparedStatement.execute();
 		connectDB.close();
+		Stage stage = (Stage) sceneAddAcademicYear.getScene().getWindow();
+		stage.close();
+	}
+
+	public void closeAcademicYear() {
+		Stage stage = (Stage) sceneAddAcademicYear.getScene().getWindow();
+		stage.close();
 	}
 }

@@ -1,11 +1,15 @@
 package com.example.schoolmanagementsystem;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,7 +17,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class DashboardController {
+
+public class DashboardController implements Initializable {
 
 	@FXML
 	private AnchorPane sceneDashboard;
@@ -24,6 +29,8 @@ public class DashboardController {
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
+
+
 	}
 
 	public void switchToProfessor(ActionEvent e) throws IOException {
@@ -78,8 +85,22 @@ public class DashboardController {
 		stage.showAndWait();
 	}
 
+	public void addAcademicYear() throws IOException {
+		Stage stage = new Stage();
+		Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("addAcademicYear.fxml")));
+		stage.setTitle("Add new academic year");
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.setScene(new Scene(root));
+		stage.showAndWait();
+	}
+
 	public void closeDashboard() {
 		Stage stage = (Stage) sceneDashboard.getScene().getWindow();
 		stage.close();
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		Platform.runLater( () -> sceneDashboard.requestFocus() );
 	}
 }

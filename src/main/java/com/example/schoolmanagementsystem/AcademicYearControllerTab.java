@@ -13,12 +13,13 @@ import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -40,14 +41,6 @@ public class AcademicYearControllerTab implements Initializable {
 	private ListView<String> ModuleListView;
 	@FXML
 	private TableView<Student> StudentTableView;
-	@FXML
-	private Button addModule;
-	@FXML
-	private Button addStudent;
-	@FXML
-	private Button createAcademicYear;
-	@FXML
-	private Button deleteModule;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -62,7 +55,7 @@ public class AcademicYearControllerTab implements Initializable {
 			Statement statement = connectDB.createStatement();
 			ResultSet resultSet = statement.executeQuery(query);
 
-			while (resultSet.next()){
+			while (resultSet.next()) {
 				LocalDate startDate = resultSet.getDate("startDate").toLocalDate();
 				LocalDate endDate = resultSet.getDate("endDate").toLocalDate();
 				String course = resultSet.getString("course");
@@ -90,6 +83,14 @@ public class AcademicYearControllerTab implements Initializable {
 	}
 
 	public void createAcademicYEar() {
+	}
+
+	public void goBack(ActionEvent e) throws IOException {
+		Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Dashboard.fxml")));
+		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
 	}
 
 	public void academicYearWindow() throws IOException {

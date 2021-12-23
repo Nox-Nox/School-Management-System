@@ -10,40 +10,40 @@
 
 <AnchorPane prefHeight="737.0" prefWidth="1041.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolmanagementsystem.AcademicYearControllerTab">
    <children>
-      <TableView fx:id="StudentTableView" layoutX="313.0" layoutY="48.0" prefHeight="671.0" prefWidth="227.0">
+      <TableView fx:id="StudentTableView" layoutX="338.0" layoutY="48.0" prefHeight="671.0" prefWidth="227.0">
         <columns>
           <TableColumn prefWidth="75.0" text="StudentID" />
           <TableColumn prefWidth="75.0" text="Name" />
             <TableColumn prefWidth="75.0" text="Surname" />
         </columns>
       </TableView>
-      <Label layoutX="103.0" layoutY="14.0" text="Academic Years">
+      <Label layoutX="116.0" layoutY="14.0" text="Academic Years">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <ListView fx:id="ModuleListView" layoutX="559.0" layoutY="73.0" prefHeight="333.0" prefWidth="200.0" />
-      <Label layoutX="624.0" layoutY="14.0" text="Modules">
+      <ListView fx:id="ModuleListView" layoutX="576.0" layoutY="48.0" prefHeight="333.0" prefWidth="200.0" />
+      <Label layoutX="641.0" layoutY="14.0" text="Modules">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="addModule" layoutX="799.0" layoutY="48.0" mnemonicParsing="false" text="Add module" />
-      <Button fx:id="deleteModule" layoutX="894.0" layoutY="48.0" mnemonicParsing="false" text="Delete Module" />
-      <Button fx:id="removeStudent" layoutX="789.0" layoutY="105.0" mnemonicParsing="false" text="Remove student" />
-      <Button fx:id="addStudent" layoutX="900.0" layoutY="105.0" mnemonicParsing="false" text="Add Student" />
-      <Button fx:id="createAcademicYear" layoutX="783.0" layoutY="160.0" mnemonicParsing="false" onAction="#academicYearWindow" text="Create Academic Year" />
-      <TableView fx:id="AcademicYearTableView" layoutX="31.0" layoutY="48.0" prefHeight="671.0" prefWidth="269.0">
+      <Button layoutX="799.0" layoutY="48.0" mnemonicParsing="false" text="Add module" />
+      <Button layoutX="894.0" layoutY="48.0" mnemonicParsing="false" text="Delete Module" />
+      <Button layoutX="799.0" layoutY="105.0" mnemonicParsing="false" text="Remove student" />
+      <Button layoutX="916.0" layoutY="105.0" mnemonicParsing="false" text="Add Student" />
+      <TableView fx:id="AcademicYearTableView" layoutX="31.0" layoutY="48.0" prefHeight="671.0" prefWidth="294.0">
         <columns>
           <TableColumn fx:id="startDateColumn" prefWidth="89.0" text="Start Date" />
           <TableColumn fx:id="endDateColumn" prefWidth="85.0" text="End Date" />
-            <TableColumn fx:id="courseColumn" prefWidth="94.0" text="Course" />
+            <TableColumn fx:id="courseColumn" prefWidth="119.0" text="Course" />
         </columns>
       </TableView>
-      <Label layoutX="392.0" layoutY="14.0" text="Students">
+      <Label layoutX="417.0" layoutY="14.0" text="Students">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
+      <Button layoutX="31.0" layoutY="15.0" mnemonicParsing="false" onAction="#goBack" text="Go Back" />
    </children>
 </AnchorPane>

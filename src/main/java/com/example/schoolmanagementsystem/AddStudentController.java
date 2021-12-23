@@ -1,13 +1,5 @@
 package com.example.schoolmanagementsystem;
 
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
@@ -15,6 +7,14 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.Date;
+
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 public class AddStudentController implements Initializable {
 	private final String[] genderOptions = { "Male", "Female", "Other" };
@@ -31,6 +31,8 @@ public class AddStudentController implements Initializable {
 	private ChoiceBox<String> gender;
 	@FXML
 	private ChoiceBox<String> course;
+	@FXML
+	private ChoiceBox<String> academic;
 	@FXML
 	private TextField name;
 	@FXML

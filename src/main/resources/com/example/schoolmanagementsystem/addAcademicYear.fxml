@@ -6,14 +6,15 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolmanagementsystem.AddAcademicYear">
+<AnchorPane fx:id="sceneAddAcademicYear" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolmanagementsystem.AddAcademicYear">
    <children>
       <DatePicker fx:id="startDatePicker" layoutX="14.0" layoutY="61.0" />
       <DatePicker fx:id="endDatePicker" layoutX="14.0" layoutY="148.0" />
+      <ChoiceBox fx:id="courseChoiceBox" layoutX="356.0" layoutY="61.0" prefWidth="150.0" />
       <Label layoutX="75.0" layoutY="27.0" text="Start date" />
       <Label layoutX="78.0" layoutY="113.0" text="End date" />
-      <ChoiceBox fx:id="courseChoiceBox" layoutX="356.0" layoutY="61.0" prefWidth="150.0" />
       <Label layoutX="413.0" layoutY="27.0" text="Course" />
-      <Button layoutX="506.0" layoutY="350.0" mnemonicParsing="false" onAction="#submit" text="Submit" />
+      <Button layoutX="523.0" layoutY="363.0" mnemonicParsing="false" onAction="#submit" prefHeight="25.0" prefWidth="63.0" text="Submit" />
+      <Button layoutX="14.0" layoutY="363.0" mnemonicParsing="false" onAction="#closeAcademicYear" prefHeight="25.0" prefWidth="63.0" text="Close" />
    </children>
 </AnchorPane>
