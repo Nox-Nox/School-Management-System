@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -30,9 +30,24 @@ public class AddModuleController implements Initializable {
 	private TextField moduleName;
 	@FXML
 	private AnchorPane sceneAddModule;
+	@FXML
+	private Button submitButton;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		getCourse();
+//		courseOptions.setOnAction(this::check); // " :: " method reference operator
+		courseOptions.setOnAction(e -> {
+			getProfessor();
+			courseOptions.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+				proList.clear();
+				professorOptions.getItems().clear();
+				getProfessor();
+			});
+		});
+	}
+
+	private void getCourse() {
 		try {
 			DBconnect dBconnect = new DBconnect();
 			Connection connectDB = dBconnect.getConnection();
@@ -48,10 +63,9 @@ public class AddModuleController implements Initializable {
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
-		courseOptions.setOnAction(this::check); // " :: " method reference operator
 	}
 
-	public void getProfessor() {
+	private void getProfessor() {
 		String course = courseOptions.getValue();
 		String[] code = course.split(" ");
 		String course_code = code[0];
@@ -75,14 +89,14 @@ public class AddModuleController implements Initializable {
 		}
 	}
 
-	public void check(ActionEvent event) {
-		getProfessor();
-		courseOptions.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			proList.clear();
-			professorOptions.getItems().clear();
-			getProfessor();
-		});
-	}
+//	public void check(ActionEvent event) {
+//		getProfessor();
+//		courseOptions.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+//			proList.clear();
+//			professorOptions.getItems().clear();
+//			getProfessor();
+//		});
+//	}
 
 	public void submit() throws SQLException, ClassNotFoundException {
 		moduleNameField = moduleName.getText();
@@ -112,6 +126,9 @@ public class AddModuleController implements Initializable {
 		prepareSmt1.close();
 		connectDB.close();
 		professorOptions.getItems().clear();
+		submitButton.setOnAction(e -> {
+			courseOptions.getItems().clear();
+		});
 		moduleCode.clear();
 		moduleName.clear();
 		Platform.runLater(() -> moduleName.requestFocus());

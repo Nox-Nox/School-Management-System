@@ -25,6 +25,7 @@ public class AddStudentController implements Initializable {
 	private String courseNameField;
 	private Date dateField;
 	private List<String> courseOptions = new ArrayList<>();
+	private List<String> academicOptions = new ArrayList<>();
 	@FXML
 	private DatePicker date;
 	@FXML
@@ -45,6 +46,10 @@ public class AddStudentController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		gender.getItems().addAll(genderOptions);
+		getCourse();
+	}
+
+	private void getCourse(){
 		try {
 			DBconnect dBconnect = new DBconnect();
 			Connection connectDB = dBconnect.getConnection();

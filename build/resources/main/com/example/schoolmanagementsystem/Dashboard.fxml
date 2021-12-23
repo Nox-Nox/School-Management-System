@@ -14,9 +14,10 @@
          </children>
       </HBox>
       <Button fx:id="logoutB" layoutX="14.0" layoutY="533.0" mnemonicParsing="false" onAction="#closeDashboard" prefHeight="43.0" prefWidth="80.0" text="Log out" />
+      <Button fx:id="addModule1" layoutX="212.0" layoutY="533.0" mnemonicParsing="false" onAction="#addAcademicYear" prefHeight="43.0" prefWidth="123.0" text="Add Academic Year" />
+      <Button fx:id="addModule" layoutX="348.0" layoutY="533.0" mnemonicParsing="false" onAction="#addModule" prefHeight="43.0" prefWidth="110.0" text="Add Module" />
+      <Button fx:id="addCourse" layoutX="474.0" layoutY="533.0" mnemonicParsing="false" onAction="#addCourse" prefHeight="43.0" prefWidth="110.0" text="Add Course" />
+      <Button fx:id="addProfessor" layoutX="603.0" layoutY="533.0" mnemonicParsing="false" onAction="#addProfessor" prefHeight="43.0" prefWidth="110.0" text="Add Professor" />
       <Button fx:id="addStudent" layoutX="723.0" layoutY="533.0" mnemonicParsing="false" onAction="#addStudent" prefHeight="43.0" prefWidth="110.0" text="Add Student" />
-      <Button fx:id="addProfessor" layoutX="594.0" layoutY="533.0" mnemonicParsing="false" onAction="#addProfessor" prefHeight="43.0" prefWidth="110.0" text="Add Professor" />
-      <Button fx:id="addCourse" layoutX="465.0" layoutY="533.0" mnemonicParsing="false" onAction="#addCourse" prefHeight="43.0" prefWidth="110.0" text="Add Course" />
-      <Button fx:id="addModule" layoutX="339.0" layoutY="533.0" mnemonicParsing="false" onAction="#addModule" prefHeight="43.0" prefWidth="110.0" text="Add Module" />
    </children>
 </AnchorPane>
