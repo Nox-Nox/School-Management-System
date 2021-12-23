@@ -19,9 +19,9 @@
       <TextField fx:id="studentID" layoutX="225.0" layoutY="75.0" prefHeight="25.0" prefWidth="175.0" />
       <TextField fx:id="name" layoutX="225.0" layoutY="115.0" prefHeight="25.0" prefWidth="175.0" />
       <TextField fx:id="surname" layoutX="225.0" layoutY="155.0" prefHeight="25.0" prefWidth="175.0" />
-      <ChoiceBox fx:id="gender" layoutX="225.0" layoutY="195.0" prefHeight="25.0" prefWidth="175.0" />
-      <ChoiceBox fx:id="course" layoutX="225.0" layoutY="235.0" prefHeight="25.0" prefWidth="175.0" />
-      <ChoiceBox fx:id="academic" layoutX="225.0" layoutY="275.0" prefHeight="25.0" prefWidth="175.0" />
+      <ChoiceBox fx:id="genderOptions" layoutX="225.0" layoutY="195.0" prefHeight="25.0" prefWidth="175.0" />
+      <ChoiceBox fx:id="courseOptions" layoutX="225.0" layoutY="235.0" prefHeight="25.0" prefWidth="175.0" />
+      <ChoiceBox fx:id="academicOptions" layoutX="225.0" layoutY="275.0" prefHeight="25.0" prefWidth="175.0" />
       <DatePicker fx:id="date" layoutX="225.0" layoutY="315.0" prefHeight="25.0" prefWidth="175.0" />
       <Button fx:id="generateID" layoutX="435.0" layoutY="75.0" mnemonicParsing="false" onAction="#generate" text="Generate ID" />
       <Button fx:id="Submit" layoutX="538.0" layoutY="399.0" mnemonicParsing="false" onAction="#submit" prefHeight="37.0" prefWidth="83.0" text="Submit" />

@@ -22,7 +22,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="submit" layoutX="498.0" layoutY="338.0" mnemonicParsing="false" onAction="#submit" prefHeight="40.0" prefWidth="77.0" text="Submit" />
+      <Button fx:id="submitButton" layoutX="498.0" layoutY="338.0" mnemonicParsing="false" onAction="#submit" prefHeight="40.0" prefWidth="77.0" text="Submit" />
       <Button fx:id="close" layoutX="31.0" layoutY="338.0" mnemonicParsing="false" onAction="#closeAddModule" prefHeight="40.0" prefWidth="77.0" text="Close" />
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="273.0" layoutY="165.0" text="Course">
          <font>
