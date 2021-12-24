@@ -126,6 +126,8 @@ public class ProfessorTabController implements Initializable {
 	public void addCourse() throws SQLException, ClassNotFoundException {
 		int professor_ID = professorTable.getSelectionModel().selectedItemProperty().getValue().getProfessor_ID();
 		int courseID = courseOptions.getValue().getCourseID();
+		int oldSize = professorCourseView.getItems().size();
+		Course selectedCourse = courseOptions.getValue();
 		String professorName = professorTable.getSelectionModel().selectedItemProperty().getValue().getName();
 		String query = "INSERT INTO prof_course_junction (professor_ID, courseID)" + "VALUES(?, ?)";
 		PreparedStatement prepareStatement = connectToDB().prepareStatement(query);
@@ -133,6 +135,11 @@ public class ProfessorTabController implements Initializable {
 		prepareStatement.setInt(2, courseID);
 		prepareStatement.execute();
 		connectToDB().close();
+		professorCourseView.getItems().add(selectedCourse);
+		int newSize = professorCourseView.getItems().size();
+		if (oldSize>newSize){
+			professorCourseView.setItems(courseListView);
+		}
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		alert.setContentText("Course added to professor " + professorName);
 		alert.showAndWait();
@@ -141,6 +148,8 @@ public class ProfessorTabController implements Initializable {
 	public void removeCourse() throws SQLException, ClassNotFoundException {
 		int professor_ID = professorTable.getSelectionModel().selectedItemProperty().getValue().getProfessor_ID();
 		int courseID = professorCourseView.getSelectionModel().selectedItemProperty().getValue().getCourseID();
+		int indexOfCourse = professorCourseView.getSelectionModel().getSelectedIndex();
+		int oldSize = professorCourseView.getItems().size();
 		String professorName = professorTable.getSelectionModel().selectedItemProperty().getValue().getName();
 		String query = "DELETE prof_course_junction FROM prof_course_junction JOIN professor ON (prof_course_junction.professor_ID=professor.professor_ID) JOIN course ON (prof_course_junction.courseID=course.courseID) WHERE prof_course_junction.courseID = ? AND prof_course_junction.professor_ID = ?";
 		PreparedStatement prepareStatement = connectToDB().prepareStatement(query);
@@ -148,6 +157,11 @@ public class ProfessorTabController implements Initializable {
 		prepareStatement.setInt(2, professor_ID);
 		prepareStatement.execute();
 		connectToDB().close();
+		professorCourseView.getItems().remove(indexOfCourse);
+		int newSize = professorCourseView.getItems().size();
+		if (oldSize<newSize){
+			professorCourseView.setItems(courseListView);
+		}
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		alert.setContentText("Course removed from professor " + professorName);
 		alert.showAndWait();

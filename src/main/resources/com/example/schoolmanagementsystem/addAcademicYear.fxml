@@ -6,15 +6,15 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="sceneAddAcademicYear" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolmanagementsystem.controller.AddAcademicYearController">
+<AnchorPane fx:id="sceneAddAcademicYear" prefHeight="240.0" prefWidth="425.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolmanagementsystem.controller.AddAcademicYearController">
    <children>
-      <DatePicker fx:id="startDatePicker" layoutX="14.0" layoutY="61.0" />
-      <DatePicker fx:id="endDatePicker" layoutX="14.0" layoutY="148.0" />
-      <ChoiceBox fx:id="courseChoiceBox" layoutX="356.0" layoutY="61.0" prefWidth="150.0" />
-      <Label layoutX="75.0" layoutY="27.0" text="Start date" />
-      <Label layoutX="78.0" layoutY="113.0" text="End date" />
-      <Label layoutX="413.0" layoutY="27.0" text="Course" />
-      <Button layoutX="523.0" layoutY="363.0" mnemonicParsing="false" onAction="#submit" prefHeight="25.0" prefWidth="63.0" text="Submit" />
-      <Button layoutX="14.0" layoutY="363.0" mnemonicParsing="false" onAction="#closeAcademicYear" prefHeight="25.0" prefWidth="63.0" text="Close" />
+      <DatePicker fx:id="startDatePicker" layoutX="15.0" layoutY="60.0" />
+      <DatePicker fx:id="endDatePicker" layoutX="15.0" layoutY="150.0" />
+      <ChoiceBox fx:id="courseChoiceBox" layoutX="245.0" layoutY="60.0" prefWidth="150.0" />
+      <Label layoutX="75.0" layoutY="30.0" text="Start date" />
+      <Label layoutX="75.0" layoutY="115.0" text="End date" />
+      <Label layoutX="300.0" layoutY="30.0" text="Course" />
+      <Button layoutX="290.0" layoutY="200.0" mnemonicParsing="false" onAction="#submit" prefHeight="25.0" prefWidth="65.0" text="Submit" />
+      <Button layoutX="15.0" layoutY="200.0" mnemonicParsing="false" onAction="#closeAcademicYear" prefHeight="25.0" prefWidth="65.0" text="Close" />
    </children>
 </AnchorPane>

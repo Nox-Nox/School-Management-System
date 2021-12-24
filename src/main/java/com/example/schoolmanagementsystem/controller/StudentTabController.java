@@ -127,14 +127,20 @@ public class StudentTabController implements Initializable {
 	public void addModule() throws SQLException, ClassNotFoundException {
 		int student_ID = studentTable.getSelectionModel().selectedItemProperty().getValue().getStudent_ID();
 		int moduleID = moduleOptions.getValue().getModuleID();
+		int oldSize = studentModuleView.getItems().size();
+		Module selectedModule = moduleOptions.getValue();
 		String studentName = studentTable.getSelectionModel().selectedItemProperty().getValue().getName();
-
 		String query = "INSERT INTO student_module_junction (student_ID, moduleID)" + "VALUES(?, ?)";
 		PreparedStatement preparedStatement = connectToDB().prepareStatement(query);
 		preparedStatement.setInt(1, student_ID);
 		preparedStatement.setInt(2, moduleID);
 		preparedStatement.execute();
 		connectToDB().close();
+		studentModuleView.getItems().add(selectedModule);
+		int newSize = studentModuleView.getItems().size();
+		if (oldSize>newSize){
+			studentModuleView.setItems(moduleListView);
+		}
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		alert.setContentText("Module added to student " + studentName);
 		alert.showAndWait();
@@ -143,6 +149,8 @@ public class StudentTabController implements Initializable {
 	public void removeModule() throws SQLException, ClassNotFoundException {
 		int moduleID = studentModuleView.getSelectionModel().getSelectedItem().getModuleID();
 		int student_ID = studentTable.getSelectionModel().getSelectedItem().getStudent_ID();
+		int oldSize = studentModuleView.getItems().size();
+		int indexOfModule = studentModuleView.getSelectionModel().getSelectedIndex();
 		String studentName = studentTable.getSelectionModel().getSelectedItem().getName();
 		String query = "DELETE student_module_junction FROM student_module_junction JOIN student ON (student_module_junction.student_ID=student.student_ID) JOIN module ON (student_module_junction.moduleID=module.moduleID) WHERE student_module_junction.moduleID = ? AND student_module_junction.student_ID = ?";
 		PreparedStatement prepareStatement = connectToDB().prepareStatement(query);
@@ -150,6 +158,11 @@ public class StudentTabController implements Initializable {
 		prepareStatement.setInt(2, student_ID);
 		prepareStatement.execute();
 		connectToDB().close();
+		studentModuleView.getItems().remove(indexOfModule);
+		int newSize = studentModuleView.getItems().size();
+		if (oldSize<newSize){
+			studentModuleView.setItems(moduleListView);
+		}
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		alert.setContentText("Module removed from student " + studentName);
 		alert.showAndWait();
