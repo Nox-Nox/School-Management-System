@@ -7,8 +7,11 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import com.example.schoolmanagementsystem.DBconnect;
+import com.example.schoolmanagementsystem.datamodel.Course;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -18,12 +21,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class AddModuleController implements Initializable {
-	private List<String> courseList = new ArrayList<>();
+	private ObservableList<Course> courseList = FXCollections.observableArrayList();
 	private List<String> proList = new ArrayList<>();
 	private String moduleNameField;
 	private String moduleCodeField;
 	@FXML
-	private ChoiceBox<String> courseOptions;
+	private ChoiceBox<Course> courseOptions;
 	@FXML
 	private ChoiceBox<String> professorOptions;
 	@FXML
@@ -38,13 +41,16 @@ public class AddModuleController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		getCourse();
-		courseOptions.setOnAction(e -> {
-			getProfessor();
-			courseOptions.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+		courseOptions.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if (courseOptions.getItems().isEmpty()) {
+				getCourse();
+			} else {
+				getProfessor();
 				proList.clear();
 				professorOptions.getItems().clear();
 				getProfessor();
-			});
+			}
 		});
 	}
 
@@ -54,9 +60,9 @@ public class AddModuleController implements Initializable {
 			Statement statement = connectToDB().createStatement();
 			ResultSet resultSet = statement.executeQuery(query);
 			while (resultSet.next()) {
-				courseList.add(resultSet.getString("courseCode") + " " + resultSet.getString("courseName"));
+				courseList.add(new Course(resultSet.getString("courseCode"), resultSet.getString("courseName")));
 			}
-			courseOptions.getItems().addAll(courseList);
+			courseOptions.setItems(courseList);
 			connectToDB().close();
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
@@ -64,9 +70,7 @@ public class AddModuleController implements Initializable {
 	}
 
 	private void getProfessor() {
-		String course = courseOptions.getValue();
-		String[] code = course.split(" ");
-		String course_code = code[0];
+		String course_code = courseOptions.getValue().getCourseCode();
 		try {
 			String query = "SELECT professor.professorID, professor.name, professor.surname FROM professor JOIN prof_course_junction ON (professor.professor_ID=prof_course_junction.professor_ID) JOIN course ON (course.courseID=prof_course_junction.courseID) WHERE course.courseCode = ?";
 			PreparedStatement prepareStatement = connectToDB().prepareStatement(query);
@@ -104,12 +108,10 @@ public class AddModuleController implements Initializable {
 		prepareStatement1.setInt(3, courseID);
 		prepareStatement1.execute();
 		connectToDB().close();
-		professorOptions.getItems().clear();
-		submitButton.setOnAction(e -> {
-			courseOptions.getItems().clear();
-		});
-		moduleCode.clear();
 		moduleName.clear();
+		moduleCode.clear();
+		professorOptions.getItems().clear();
+		courseOptions.getItems().clear();
 		Platform.runLater(() -> moduleName.requestFocus());
 	}
 
