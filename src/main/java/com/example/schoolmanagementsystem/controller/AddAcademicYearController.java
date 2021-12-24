@@ -1,4 +1,4 @@
-package com.example.schoolmanagementsystem;
+package com.example.schoolmanagementsystem.controller;
 
 import java.net.URL;
 import java.sql.*;
@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.example.schoolmanagementsystem.DBconnect;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -15,7 +17,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public class AddAcademicYear implements Initializable {
+public class AddAcademicYearController implements Initializable {
 
 	private Date startDateField;
 	private Date endDateField;

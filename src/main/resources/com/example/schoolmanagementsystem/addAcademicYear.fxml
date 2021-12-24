@@ -6,7 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="sceneAddAcademicYear" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolmanagementsystem.AddAcademicYear">
+<AnchorPane fx:id="sceneAddAcademicYear" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolmanagementsystem.controller.AddAcademicYearController">
    <children>
       <DatePicker fx:id="startDatePicker" layoutX="14.0" layoutY="61.0" />
       <DatePicker fx:id="endDatePicker" layoutX="14.0" layoutY="148.0" />

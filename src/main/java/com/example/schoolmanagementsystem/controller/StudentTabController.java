@@ -2,11 +2,10 @@ package com.example.schoolmanagementsystem.controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -36,6 +35,7 @@ public class StudentTabController implements Initializable {
 	private final ObservableList<Student> studentList = FXCollections.observableArrayList();
 	private final FilteredList<Student> filteredList = new FilteredList<>(studentList, b -> true);
 	private final SortedList<Student> studentSortedList = new SortedList<>(filteredList);
+	private List<String> moduleList = new ArrayList<>();
 	@FXML
 	private TableView<Student> studentTable;
 	@FXML
@@ -48,9 +48,12 @@ public class StudentTabController implements Initializable {
 	private TextField searchStudent;
 	@FXML
 	private ChoiceBox<String> filterStudent;
+	@FXML
+	private ChoiceBox<String> moduleOptions;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+//		moduleOptions.getItems().addAll(palceholder);
 		filterStudent.getItems().addAll(searchOption);
 		studentID.setCellValueFactory(new PropertyValueFactory<>("StudentID"));
 		name.setCellValueFactory(new PropertyValueFactory<>("Name"));
@@ -104,6 +107,70 @@ public class StudentTabController implements Initializable {
 				}));
 		studentSortedList.comparatorProperty().bind(studentTable.comparatorProperty());
 		studentTable.setItems(studentSortedList);
+
+		studentTable.setOnMouseClicked(e -> {
+			Student selectedRow = studentTable.getSelectionModel().selectedItemProperty().getValue();
+			int studentID = selectedRow.getStudentID();
+			System.out.println(studentID);
+			try {
+				getModule(studentID);
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			} catch (ClassNotFoundException ex) {
+				ex.printStackTrace();
+			}
+		});
+
+	}
+
+//	public void addModule() throws SQLException, ClassNotFoundException {
+//		Student selectedRow = studentTable.getSelectionModel().selectedItemProperty().getValue();
+//		int studentID = selectedRow.getStudentID();
+//		int student_ID = 0;
+//		int courseID = 0;
+//		DBconnect dbConnect = new DBconnect();
+//		Connection connection = dbConnect.getConnection();
+//		String query = "SELECT student_ID, courseID FROM student WHERE studentID = ?";
+//		PreparedStatement preparedStatement = connection.prepareStatement(query);
+//		preparedStatement.setInt(1, studentID);
+//		ResultSet resultSet = preparedStatement.executeQuery();
+//
+//		if (resultSet.next()) {
+//			student_ID = resultSet.getInt("student_ID");
+//			courseID = resultSet.getInt("courseID");
+//		}
+//
+//		String query1 = "SELECT  moduleID, moduleCode, moduleName from module where courseID = ?";
+//		PreparedStatement preparedStatement1 = connection.prepareStatement(query1);
+//		preparedStatement1.setInt(1, courseID);
+//		ResultSet resultSet1 = preparedStatement1.executeQuery();
+//
+//		while (resultSet1.next()){
+//			moduleList.add(new Module(resultSet1.getInt("moduleID"), resultSet1.getString("moduleCode"), resultSet1.getString("moduleName")));
+//		}
+//		moduleOptions.getItems().addAll(String.valueOf(moduleList));
+//	}
+
+	public void getModule(int studentID) throws SQLException, ClassNotFoundException {
+		int courseID = 0;
+		DBconnect dbConnect = new DBconnect();
+		Connection connection = dbConnect.getConnection();
+		String query = "SELECT courseID FROM student WHERE studentID = ?";
+		PreparedStatement preparedStatement = connection.prepareStatement(query);
+		preparedStatement.setInt(1, studentID);
+		ResultSet resultSet = preparedStatement.executeQuery();
+		if (resultSet.next()) {
+			courseID = resultSet.getInt("courseID");
+		}
+		String query1 = "SELECT  moduleID, moduleCode, moduleName from module where courseID = ?";
+		PreparedStatement preparedStatement1 = connection.prepareStatement(query1);
+		preparedStatement1.setInt(1, courseID);
+		ResultSet resultSet1 = preparedStatement1.executeQuery();
+
+		while (resultSet1.next()) {
+			moduleList.add(resultSet1.getInt("moduleID")+" "+resultSet1.getString("moduleCode")+" "+resultSet1.getString("moduleName"));
+		}
+		moduleOptions.getItems().addAll(String.valueOf(moduleList));
 	}
 
 	public void reset() {
@@ -112,7 +179,8 @@ public class StudentTabController implements Initializable {
 	}
 
 	public void goBack(ActionEvent e) throws IOException {
-		Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/schoolmanagementsystem/Dashboard.fxml")));
+		Parent root = FXMLLoader.load(
+				Objects.requireNonNull(getClass().getResource("/com/example/schoolmanagementsystem/Dashboard.fxml")));
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
