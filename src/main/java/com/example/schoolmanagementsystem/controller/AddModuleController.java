@@ -38,7 +38,6 @@ public class AddModuleController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		getCourse();
-//		courseOptions.setOnAction(this::check); // " :: " method reference operator
 		courseOptions.setOnAction(e -> {
 			getProfessor();
 			courseOptions.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -51,17 +50,14 @@ public class AddModuleController implements Initializable {
 
 	private void getCourse() {
 		try {
-			DBconnect dBconnect = new DBconnect();
-			Connection connectDB = dBconnect.getConnection();
 			String query = "SELECT DISTINCT courseName, courseCode FROM course";
-			Statement statement = connectDB.createStatement();
-			ResultSet queryOut = statement.executeQuery(query);
-
-			while (queryOut.next()) {
-				courseList.add(queryOut.getString("courseCode") + " " + queryOut.getString("courseName"));
+			Statement statement = connectToDB().createStatement();
+			ResultSet resultSet = statement.executeQuery(query);
+			while (resultSet.next()) {
+				courseList.add(resultSet.getString("courseCode") + " " + resultSet.getString("courseName"));
 			}
 			courseOptions.getItems().addAll(courseList);
-			connectDB.close();
+			connectToDB().close();
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -71,26 +67,20 @@ public class AddModuleController implements Initializable {
 		String course = courseOptions.getValue();
 		String[] code = course.split(" ");
 		String course_code = code[0];
-
 		try {
-			DBconnect dBconnect = new DBconnect();
-			Connection connectDB = dBconnect.getConnection();
 			String query = "SELECT professor.professorID, professor.name, professor.surname FROM professor JOIN prof_course_junction ON (professor.professor_ID=prof_course_junction.professor_ID) JOIN course ON (course.courseID=prof_course_junction.courseID) WHERE course.courseCode = ?";
-			PreparedStatement prepareStmt = connectDB.prepareStatement(query);
-			prepareStmt.setString(1, course_code);
-			ResultSet queryOut = prepareStmt.executeQuery();
-
-			while (queryOut.next()) {
-				proList.add(queryOut.getInt("professorID") + " " + queryOut.getString("name") + " "
-						+ queryOut.getString("surname"));
+			PreparedStatement prepareStatement = connectToDB().prepareStatement(query);
+			prepareStatement.setString(1, course_code);
+			ResultSet resultSet = prepareStatement.executeQuery();
+			while (resultSet.next()) {
+				proList.add(resultSet.getInt("professorID") + " " + resultSet.getString("name") + " "
+						+ resultSet.getString("surname"));
 			}
 			professorOptions.getItems().addAll(proList);
-
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
-
 
 	public void submit() throws SQLException, ClassNotFoundException {
 		moduleNameField = moduleName.getText();
@@ -98,26 +88,22 @@ public class AddModuleController implements Initializable {
 		String[] id = professorOptions.getValue().split(" ");
 		String prof_id = id[0];
 		int courseID = 0;
-
-		DBconnect dbConnect = new DBconnect();
-		Connection connectDB = dbConnect.getConnection();
 		String query = "SELECT course.courseID FROM course JOIN prof_course_junction ON (course.courseID=prof_course_junction.courseID) JOIN professor ON (professor.professor_ID=prof_course_junction.professor_ID) WHERE professorID = ?";
-		PreparedStatement prepareStmt = connectDB.prepareStatement(query);
-		prepareStmt.setString(1, prof_id);
-		ResultSet resultSet = prepareStmt.executeQuery();
-
+		PreparedStatement prepareStatement = connectToDB().prepareStatement(query);
+		prepareStatement.setString(1, prof_id);
+		ResultSet resultSet = prepareStatement.executeQuery();
 		if (resultSet.next()) {
 			courseID = resultSet.getInt("courseID");
 		}
 		resultSet.close();
 
 		String query1 = "INSERT INTO module (moduleCode, moduleName, courseID)" + "VALUES(?, ?, ?)";
-		PreparedStatement prepareSmt1 = connectDB.prepareStatement(query1);
-		prepareSmt1.setString(1, moduleCodeField);
-		prepareSmt1.setString(2, moduleNameField);
-		prepareSmt1.setInt(3, courseID);
-		prepareSmt1.execute();
-		connectDB.close();
+		PreparedStatement prepareStatement1 = connectToDB().prepareStatement(query1);
+		prepareStatement1.setString(1, moduleCodeField);
+		prepareStatement1.setString(2, moduleNameField);
+		prepareStatement1.setInt(3, courseID);
+		prepareStatement1.execute();
+		connectToDB().close();
 		professorOptions.getItems().clear();
 		submitButton.setOnAction(e -> {
 			courseOptions.getItems().clear();
@@ -130,5 +116,11 @@ public class AddModuleController implements Initializable {
 	public void closeAddModule() {
 		Stage stage = (Stage) sceneAddModule.getScene().getWindow();
 		stage.close();
+	}
+
+	private Connection connectToDB() throws SQLException, ClassNotFoundException {
+		DBconnect dBconnect = new DBconnect();
+		Connection connection = dBconnect.getConnection();
+		return connection;
 	}
 }

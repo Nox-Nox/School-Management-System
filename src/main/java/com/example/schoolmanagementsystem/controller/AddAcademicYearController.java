@@ -18,7 +18,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class AddAcademicYearController implements Initializable {
-
 	private Date startDateField;
 	private Date endDateField;
 	private String courseField;
@@ -35,10 +34,8 @@ public class AddAcademicYearController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		try {
-			DBconnect dbConnect = new DBconnect();
-			Connection connectDB = dbConnect.getConnection();
 			String query = "SELECT courseName FROM course";
-			Statement statement = connectDB.createStatement();
+			Statement statement = connectToDB().createStatement();
 			ResultSet resultSet = statement.executeQuery(query);
 			while (resultSet.next()) {
 				courses.add(resultSet.getString("courseName"));
@@ -55,15 +52,13 @@ public class AddAcademicYearController implements Initializable {
 		endDateField = Date.from(endDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 		java.sql.Date sqlEndDate = new java.sql.Date(endDateField.getTime());
 		courseField = courseChoiceBox.getValue();
-		DBconnect dbConnect = new DBconnect();
-		Connection connectDB = dbConnect.getConnection();
 		String query = "INSERT INTO timetable (startDate, endDate, course)" + "VALUES (?, ?, ?)";
-		PreparedStatement preparedStatement = connectDB.prepareStatement(query);
+		PreparedStatement preparedStatement = connectToDB().prepareStatement(query);
 		preparedStatement.setDate(1, sqlStartDate);
 		preparedStatement.setDate(2, sqlEndDate);
 		preparedStatement.setString(3, courseField);
 		preparedStatement.execute();
-		connectDB.close();
+		connectToDB().close();
 		Stage stage = (Stage) sceneAddAcademicYear.getScene().getWindow();
 		stage.close();
 	}
@@ -71,5 +66,11 @@ public class AddAcademicYearController implements Initializable {
 	public void closeAcademicYear() {
 		Stage stage = (Stage) sceneAddAcademicYear.getScene().getWindow();
 		stage.close();
+	}
+
+	private Connection connectToDB() throws SQLException, ClassNotFoundException {
+		DBconnect dBconnect = new DBconnect();
+		Connection connection = dBconnect.getConnection();
+		return connection;
 	}
 }

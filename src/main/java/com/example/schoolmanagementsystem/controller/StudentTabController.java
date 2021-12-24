@@ -148,6 +148,10 @@ public class StudentTabController implements Initializable {
 		alert.showAndWait();
 	}
 
+	public void removeModule(){
+
+	}
+
 	private void getModule(int studentID) throws SQLException, ClassNotFoundException {
 		int courseID = 0;
 		String query = "SELECT courseID FROM student WHERE studentID = ?";

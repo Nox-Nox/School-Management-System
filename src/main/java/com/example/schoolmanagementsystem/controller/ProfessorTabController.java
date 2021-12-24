@@ -55,28 +55,25 @@ public class ProfessorTabController implements Initializable {
 		professorID.setCellValueFactory(new PropertyValueFactory<>("ProfessorID"));
 		name.setCellValueFactory(new PropertyValueFactory<>("Name"));
 		surname.setCellValueFactory(new PropertyValueFactory<>("Surname"));
-
 		try {
-			DBconnect dbConnect = new DBconnect();
-			Connection connectDB = dbConnect.getConnection();
-			String query = "SELECT* FROM professor";
-			Statement statement = connectDB.createStatement();
-			ResultSet queryOut = statement.executeQuery(query);
 
-			while (queryOut.next()) {
-				Integer professorid = queryOut.getInt("professorID");
-				String name = queryOut.getString("name");
-				String surname = queryOut.getString("surname");
-				String gender = queryOut.getString("gender");
-				Integer age = queryOut.getInt("age");
-				LocalDate date = LocalDate.parse(queryOut.getString("DoB"));
+			String query = "SELECT* FROM professor";
+			Statement statement = connectToDB().createStatement();
+			ResultSet resultSet = statement.executeQuery(query);
+			while (resultSet.next()) {
+				Integer professorid = resultSet.getInt("professorID");
+				String name = resultSet.getString("name");
+				String surname = resultSet.getString("surname");
+				String gender = resultSet.getString("gender");
+				Integer age = resultSet.getInt("age");
+				LocalDate date = LocalDate.parse(resultSet.getString("DoB"));
 
 				professorList.add(new Professor(professorid, name, surname, gender, age, date));
 			}
 			professorTable.setItems(professorList);
-			queryOut.close();
+			resultSet.close();
 			statement.close();
-			connectDB.close();
+			connectToDB().close();
 
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
@@ -118,5 +115,10 @@ public class ProfessorTabController implements Initializable {
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
+	}
+	private Connection connectToDB() throws SQLException, ClassNotFoundException {
+		DBconnect dBconnect = new DBconnect();
+		Connection connection = dBconnect.getConnection();
+		return connection;
 	}
 }

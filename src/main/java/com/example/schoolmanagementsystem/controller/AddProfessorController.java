@@ -20,15 +20,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class AddProfessorController implements Initializable {
-
 	private final String[] genderOptions = { "Male", "Female", "Other" };
 	int professorIDField;
-	String nameField;
-	String surnameField;
-	String genderField;
-	Date dateField;
-	@FXML
-	private TextField age;
+	private String nameField;
+	private String surnameField;
+	private String genderField;
+	private Date dateField;
 	@FXML
 	private DatePicker date;
 	@FXML
@@ -57,20 +54,17 @@ public class AddProfessorController implements Initializable {
 		LocalDate birthday = date.getValue();
 		Period period = Period.between(birthday, LocalDate.now());
 		int age = period.getYears();
-
-		DBconnect dBconnect = new DBconnect();
-		Connection connectDB = dBconnect.getConnection();
 		String query = "INSERT INTO professor (professorID, name, surname, gender, age, DoB)"
 				+ "VALUES(?, ?, ?, ?, ?, ?)";
-		PreparedStatement prepareStmt = connectDB.prepareStatement(query);
-		prepareStmt.setInt(1, professorIDField);
-		prepareStmt.setString(2, nameField);
-		prepareStmt.setString(3, surnameField);
-		prepareStmt.setString(4, genderField);
-		prepareStmt.setInt(5, age);
-		prepareStmt.setDate(6, sqlDate);
-		prepareStmt.execute();
-		connectDB.close();
+		PreparedStatement prepareStatement = connectToDB().prepareStatement(query);
+		prepareStatement.setInt(1, professorIDField);
+		prepareStatement.setString(2, nameField);
+		prepareStatement.setString(3, surnameField);
+		prepareStatement.setString(4, genderField);
+		prepareStatement.setInt(5, age);
+		prepareStatement.setDate(6, sqlDate);
+		prepareStatement.execute();
+		connectToDB().close();
 		Stage stage = (Stage) sceneAddProfessor.getScene().getWindow();
 		stage.close();
 	}
@@ -79,23 +73,26 @@ public class AddProfessorController implements Initializable {
 		Random random = new Random();
 		int ID = random.nextInt(99999);
 		professorID.setText(String.valueOf(ID));
-		DBconnect dbConnect = new DBconnect();
-		Connection connectDB = dbConnect.getConnection();
 		String query = "SELECT professorID FROM professor";
-		Statement statement = connectDB.createStatement();
-		ResultSet queryOut = statement.executeQuery(query);
-		while (queryOut.next()) {
-			if (queryOut.getInt("professorID") == ID) {
+		Statement statement = connectToDB().createStatement();
+		ResultSet resultSet = statement.executeQuery(query);
+		while (resultSet.next()) {
+			if (resultSet.getInt("professorID") == ID) {
 				ID = random.nextInt(99999999);
 				professorID.setText(String.valueOf(ID));
 			}
 		}
-		connectDB.close();
+		connectToDB().close();
 		professorID.setText(String.valueOf(ID));
 	}
 
 	public void closeAddProfessor() {
 		Stage stage = (Stage) sceneAddProfessor.getScene().getWindow();
 		stage.close();
+	}
+	private Connection connectToDB() throws SQLException, ClassNotFoundException {
+		DBconnect dBconnect = new DBconnect();
+		Connection connection = dBconnect.getConnection();
+		return connection;
 	}
 }

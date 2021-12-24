@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 public class AddCourseController implements Initializable {
 	private final List<String> proList = new ArrayList<>();
 	@FXML
-	AnchorPane sceneAddCourse;
+	private AnchorPane sceneAddCourse;
 	@FXML
 	private TextField courseCode;
 	@FXML
@@ -30,67 +30,54 @@ public class AddCourseController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		try {
-			DBconnect dbConnect = new DBconnect();
-			Connection connectDB = dbConnect.getConnection();
 			String query = "SELECT professorID, name, surname FROM professor";
-			Statement statement = connectDB.createStatement();
-			ResultSet queryOut = statement.executeQuery(query);
-
-			while (queryOut.next()) {
-				proList.add(queryOut.getInt("professorID") + " " + queryOut.getString("name") + " "
-						+ queryOut.getString("surname"));
+			Statement statement = connectToDB().createStatement();
+			ResultSet resultSet = statement.executeQuery(query);
+			while (resultSet.next()) {
+				proList.add(resultSet.getInt("professorID") + " " + resultSet.getString("name") + " "
+						+ resultSet.getString("surname"));
 			}
 			profOptions.getItems().addAll(proList);
-			connectDB.close();
-
+			connectToDB().close();
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void submit() throws SQLException, ClassNotFoundException{
+	public void submit() throws SQLException, ClassNotFoundException {
 		String courseNameField = courseName.getText();
 		String courseCodeField = courseCode.getText();
 		String profIDField = profOptions.getValue();
 		String[] id = profIDField.split(" ");
 		int profID = Integer.parseInt(id[0]);
-
-		DBconnect dbConnect = new DBconnect();
-		Connection connectDB = dbConnect.getConnection();
 		String query = "SELECT professor_ID FROM professor WHERE professorID = ?";
-		PreparedStatement prepareStmt = connectDB.prepareStatement(query);
-		prepareStmt.setInt(1, profID);
-		ResultSet resultSet = prepareStmt.executeQuery();
+		PreparedStatement prepareStatement = connectToDB().prepareStatement(query);
+		prepareStatement.setInt(1, profID);
+		ResultSet resultSet = prepareStatement.executeQuery();
 		int profIndex = 0;
-
 		if (resultSet.next()) {
 			profIndex = resultSet.getInt("professor_ID");
 		}
-
 		String query1 = "INSERT INTO course (courseName, courseCode)" + "VALUES(?, ?)";
-		PreparedStatement prepareStmt1 = connectDB.prepareStatement(query1);
-		prepareStmt1.setString(1, courseNameField);
-		prepareStmt1.setString(2, courseCodeField);
-		prepareStmt1.execute();
-		prepareStmt1.close();
-
+		PreparedStatement prepareStatement1 = connectToDB().prepareStatement(query1);
+		prepareStatement1.setString(1, courseNameField);
+		prepareStatement1.setString(2, courseCodeField);
+		prepareStatement1.execute();
+		prepareStatement1.close();
 		String query2 = "SELECT courseID FROM course WHERE courseName = ?";
-		PreparedStatement preparedStmt2 = connectDB.prepareStatement(query2);
-		preparedStmt2.setString(1, courseNameField);
-		ResultSet resultSet1 = preparedStmt2.executeQuery();
+		PreparedStatement prepareStatement2 = connectToDB().prepareStatement(query2);
+		prepareStatement2.setString(1, courseNameField);
+		ResultSet resultSet1 = prepareStatement2.executeQuery();
 		int courseIndex = 0;
-
 		if (resultSet1.next()) {
 			courseIndex = resultSet1.getInt("courseID");
 		}
-
 		String query3 = "INSERT INTO prof_course_junction (professor_ID, courseID)" + "VALUES(?, ?)";
-		PreparedStatement prepareStmt3 = connectDB.prepareStatement(query3);
-		prepareStmt3.setInt(1, profIndex);
-		prepareStmt3.setInt(2, courseIndex);
-		prepareStmt3.execute();
-		prepareStmt3.close();
-		connectDB.close();
+		PreparedStatement prepareStatement3 = connectToDB().prepareStatement(query3);
+		prepareStatement3.setInt(1, profIndex);
+		prepareStatement3.setInt(2, courseIndex);
+		prepareStatement3.execute();
+		connectToDB().close();
 		courseCode.clear();
 		courseName.clear();
 		Platform.runLater(() -> courseName.requestFocus());
@@ -99,5 +86,11 @@ public class AddCourseController implements Initializable {
 	public void closeAddCourse() {
 		Stage stage = (Stage) sceneAddCourse.getScene().getWindow();
 		stage.close();
+	}
+
+	private Connection connectToDB() throws SQLException, ClassNotFoundException {
+		DBconnect dBconnect = new DBconnect();
+		Connection connection = dBconnect.getConnection();
+		return connection;
 	}
 }

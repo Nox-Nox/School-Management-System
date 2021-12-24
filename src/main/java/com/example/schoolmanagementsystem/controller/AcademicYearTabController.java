@@ -51,14 +51,10 @@ public class AcademicYearTabController implements Initializable {
 		startDateColumn.setCellValueFactory(new PropertyValueFactory<>("StartDate"));
 		endDateColumn.setCellValueFactory(new PropertyValueFactory<>("EndDate"));
 		courseColumn.setCellValueFactory(new PropertyValueFactory<>("Course"));
-
 		try {
-			DBconnect dbConnect = new DBconnect();
-			Connection connectDB = dbConnect.getConnection();
 			String query = "SELECT* FROM timetable";
-			Statement statement = connectDB.createStatement();
+			Statement statement = connectToDB().createStatement();
 			ResultSet resultSet = statement.executeQuery(query);
-
 			while (resultSet.next()) {
 				LocalDate startDate = resultSet.getDate("startDate").toLocalDate();
 				LocalDate endDate = resultSet.getDate("endDate").toLocalDate();
@@ -66,12 +62,11 @@ public class AcademicYearTabController implements Initializable {
 				academicYearList.add(new AcademicYear(startDate, endDate, course));
 			}
 			AcademicYearTableView.setItems(academicYearList);
-			connectDB.close();
+			connectToDB().close();
 
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public void addStudent() {
@@ -90,7 +85,8 @@ public class AcademicYearTabController implements Initializable {
 	}
 
 	public void goBack(ActionEvent e) throws IOException {
-		Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/schoolmanagementsystem/Dashboard.fxml")));
+		Parent root = FXMLLoader.load(
+				Objects.requireNonNull(getClass().getResource("/com/example/schoolmanagementsystem/Dashboard.fxml")));
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
@@ -104,6 +100,12 @@ public class AcademicYearTabController implements Initializable {
 		stage.initModality(Modality.WINDOW_MODAL);
 		stage.setScene(new Scene(root));
 		stage.showAndWait();
+	}
+
+	private Connection connectToDB() throws SQLException, ClassNotFoundException {
+		DBconnect dBconnect = new DBconnect();
+		Connection connection = dBconnect.getConnection();
+		return connection;
 	}
 
 }

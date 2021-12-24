@@ -32,17 +32,14 @@ public class LoginController {
 		String username = userName.getText();
 		String pass = passWord.getText();
 
-		DBconnect dbConnect = new DBconnect();
-		Connection connectDB = dbConnect.getConnection();
 		String query = "SELECT username, password FROM admin";
-		Statement statement = connectDB.createStatement();
-		ResultSet queryOut = statement.executeQuery(query);
+		Statement statement = connectToDB().createStatement();
+		ResultSet resultSet = statement.executeQuery(query);
 		boolean x = false;
-
-		while (queryOut.next()) {
-			if (queryOut.getString("username").equals(username) && queryOut.getString("password").equals(pass)) {
+		while (resultSet.next()) {
+			if (resultSet.getString("username").equals(username) && resultSet.getString("password").equals(pass)) {
 				System.out.println("logged in");
-				System.out.println(queryOut.getString("username") + " " + queryOut.getString("password"));
+				System.out.println(resultSet.getString("username") + " " + resultSet.getString("password"));
 				x = true;
 				break;
 			}
@@ -57,6 +54,12 @@ public class LoginController {
 			stage.show();
 
 		}
-		connectDB.close();
+		connectToDB().close();
+	}
+
+	private Connection connectToDB() throws SQLException, ClassNotFoundException {
+		DBconnect dBconnect = new DBconnect();
+		Connection connection = dBconnect.getConnection();
+		return connection;
 	}
 }
