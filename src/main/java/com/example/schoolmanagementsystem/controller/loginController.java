@@ -1,10 +1,12 @@
-package com.example.schoolmanagementsystem;
+package com.example.schoolmanagementsystem.controller;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import com.example.schoolmanagementsystem.DBconnect;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -48,7 +50,7 @@ public class loginController {
 		if (x == false) {
 			System.out.println("wrong");
 		} else {
-			root = FXMLLoader.load(getClass().getResource("Dashboard.fxml"));
+			root = FXMLLoader.load(getClass().getResource("/com/example/schoolmanagementsystem/Dashboard.fxml"));
 			stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 			scene = new Scene(root);
 			stage.setScene(scene);

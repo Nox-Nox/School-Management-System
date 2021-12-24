@@ -1,4 +1,4 @@
-package com.example.schoolmanagementsystem;
+package com.example.schoolmanagementsystem.controller;
 
 import java.net.URL;
 import java.sql.*;
@@ -8,6 +8,8 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Random;
 import java.util.ResourceBundle;
+
+import com.example.schoolmanagementsystem.DBconnect;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

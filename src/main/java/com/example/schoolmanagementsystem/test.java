@@ -1,5 +1,6 @@
 package com.example.schoolmanagementsystem;
 
+import com.example.schoolmanagementsystem.datamodel.Student;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

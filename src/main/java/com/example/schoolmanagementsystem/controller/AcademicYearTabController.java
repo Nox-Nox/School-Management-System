@@ -1,4 +1,4 @@
-package com.example.schoolmanagementsystem;
+package com.example.schoolmanagementsystem.controller;
 
 import java.io.IOException;
 import java.net.URL;
@@ -10,6 +10,10 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 import java.util.ResourceBundle;
+
+import com.example.schoolmanagementsystem.DBconnect;
+import com.example.schoolmanagementsystem.datamodel.AcademicYear;
+import com.example.schoolmanagementsystem.datamodel.Student;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,7 +31,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class AcademicYearControllerTab implements Initializable {
+public class AcademicYearTabController implements Initializable {
 	private final ObservableList<AcademicYear> academicYearList = FXCollections.observableArrayList();
 	@FXML
 	private TableView<AcademicYear> AcademicYearTableView;
@@ -86,7 +90,7 @@ public class AcademicYearControllerTab implements Initializable {
 	}
 
 	public void goBack(ActionEvent e) throws IOException {
-		Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Dashboard.fxml")));
+		Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/schoolmanagementsystem/Dashboard.fxml")));
 		Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 		Scene scene = new Scene(root);
 		stage.setScene(scene);

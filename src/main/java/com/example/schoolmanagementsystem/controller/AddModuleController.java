@@ -1,10 +1,12 @@
-package com.example.schoolmanagementsystem;
+package com.example.schoolmanagementsystem.controller;
 
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import com.example.schoolmanagementsystem.DBconnect;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
