@@ -10,47 +10,47 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="751.0" prefWidth="1009.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolmanagementsystem.controller.StudentTabController">
+<AnchorPane prefHeight="700.0" prefWidth="975.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolmanagementsystem.controller.StudentTabController">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="133.0" layoutY="14.0" prefHeight="25.0" prefWidth="136.0" text="Students list">
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="135.0" layoutY="15.0" prefHeight="25.0" prefWidth="135.0" text="Students list">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <TableView fx:id="studentTable" layoutX="14.0" layoutY="126.0" prefHeight="563.0" prefWidth="480.0">
+      <TableView fx:id="studentTable" layoutX="15.0" layoutY="125.0" prefHeight="565.0" prefWidth="480.0">
         <columns>
           <TableColumn fx:id="studentID" prefWidth="155.0" text="Student ID" />
-          <TableColumn fx:id="name" prefWidth="147.0" text="Name" />
-            <TableColumn fx:id="surname" prefWidth="177.0" resizable="false" text="Surname" />
+          <TableColumn fx:id="name" prefWidth="150.0" text="Name" />
+            <TableColumn fx:id="surname" prefWidth="180.0" resizable="false" text="Surname" />
         </columns>
       </TableView>
-      <TextField fx:id="searchStudent" layoutX="78.0" layoutY="75.0" prefHeight="25.0" prefWidth="191.0" />
-      <Label layoutX="14.0" layoutY="74.0" text="Search">
+      <TextField fx:id="searchStudent" layoutX="80.0" layoutY="75.0" prefHeight="25.0" prefWidth="190.0" />
+      <Label layoutX="15.0" layoutY="75.0" text="Search">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="filterStudent" layoutX="358.0" layoutY="75.0" prefHeight="25.0" prefWidth="136.0" />
-      <Label layoutX="279.0" layoutY="74.0" text="Filter by">
+      <ChoiceBox fx:id="filterStudent" layoutX="360.0" layoutY="75.0" prefHeight="25.0" prefWidth="136.0" />
+      <Label layoutX="280.0" layoutY="75.0" text="Filter by">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Button layoutX="416.0" layoutY="36.0" mnemonicParsing="false" onAction="#reset" prefHeight="27.0" prefWidth="78.0" text="Reset filter" />
-      <Button layoutX="14.0" layoutY="707.0" mnemonicParsing="false" onAction="#goBack" prefHeight="35.0" prefWidth="78.0" text="Go Back" />
-      <ListView fx:id="studentModuleView" layoutX="522.0" layoutY="126.0" prefHeight="563.0" prefWidth="200.0" />
-      <Button layoutX="825.0" layoutY="189.0" mnemonicParsing="false" onAction="#addModule" prefHeight="27.0" prefWidth="86.0" text="Add module" />
-      <Label layoutX="529.0" layoutY="70.0" text="Student's modules">
+      <Button layoutX="415.0" layoutY="35.0" mnemonicParsing="false" onAction="#reset" prefHeight="30.0" prefWidth="80.0" text="Reset filter" />
+      <Button layoutX="15.0" layoutY="20.0" mnemonicParsing="false" onAction="#goBack" prefHeight="35.0" prefWidth="80.0" text="Go Back" />
+      <ListView fx:id="studentModuleView" layoutX="520.0" layoutY="125.0" prefHeight="565.0" prefWidth="200.0" />
+      <Button layoutX="735.0" layoutY="180.0" mnemonicParsing="false" onAction="#addModule" prefHeight="30.0" prefWidth="85.0" text="Add module" />
+      <Label layoutX="530.0" layoutY="70.0" text="Student's modules">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="752.0" layoutY="111.0" text="Manage student's module">
+      <Label layoutX="735.0" layoutY="110.0" text="Manage student's module">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <Button layoutX="522.0" layoutY="712.0" mnemonicParsing="false" onAction="#removeModule" text="Remove module" />
-      <ChoiceBox fx:id="moduleOptions" layoutX="785.0" layoutY="149.0" prefHeight="25.0" prefWidth="165.0" />
+      <Button layoutX="735.0" layoutY="210.0" mnemonicParsing="false" onAction="#removeModule" text="Remove module" />
+      <ChoiceBox fx:id="moduleOptions" layoutX="735.0" layoutY="140.0" prefHeight="25.0" prefWidth="165.0" />
    </children>
 </AnchorPane>

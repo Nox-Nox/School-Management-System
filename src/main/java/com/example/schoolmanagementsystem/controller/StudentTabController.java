@@ -61,9 +61,7 @@ public class StudentTabController implements Initializable {
 			String query = "SELECT* FROM student";
 			Statement statement = connectToDB().createStatement();
 			ResultSet resultSet = statement.executeQuery(query);
-
 			while (resultSet.next()) {
-
 				Integer student_id = resultSet.getInt("student_ID");
 				Integer studentid = resultSet.getInt("studentID");
 				String name = resultSet.getString("name");
@@ -106,8 +104,7 @@ public class StudentTabController implements Initializable {
 		studentSortedList.comparatorProperty().bind(studentTable.comparatorProperty());
 		studentTable.setItems(studentSortedList);
 		studentTable.setOnMouseClicked(e -> {
-			Student selectedRow = studentTable.getSelectionModel().selectedItemProperty().getValue();
-			int studentID = selectedRow.getStudentID();
+			int studentID = studentTable.getSelectionModel().selectedItemProperty().getValue().getStudentID();
 			try {
 				getModuleByStudentID(studentID);
 				moduleListView.clear();
@@ -116,7 +113,6 @@ public class StudentTabController implements Initializable {
 			} catch (SQLException | ClassNotFoundException ec) {
 				ec.printStackTrace();
 			}
-			System.out.println(studentID);
 			try {
 				getModule(studentID);
 				moduleList.clear();
@@ -129,24 +125,18 @@ public class StudentTabController implements Initializable {
 	}
 
 	public void addModule() throws SQLException, ClassNotFoundException {
-		int studentID = studentTable.getSelectionModel().selectedItemProperty().getValue().getStudentID();
-		int modueleID = moduleOptions.getValue().getModuleID();
-		int student_ID = 0;
-		String query = "SELECT student_ID FROM student WHERE studentID = ?";
+		int student_ID = studentTable.getSelectionModel().selectedItemProperty().getValue().getStudent_ID();
+		int moduleID = moduleOptions.getValue().getModuleID();
+		String studentName = studentTable.getSelectionModel().selectedItemProperty().getValue().getName();
+
+		String query = "INSERT INTO student_module_junction (student_ID, moduleID)" + "VALUES(?, ?)";
 		PreparedStatement preparedStatement = connectToDB().prepareStatement(query);
-		preparedStatement.setInt(1, studentID);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		if (resultSet.next()) {
-			student_ID = resultSet.getInt("student_ID");
-		}
-		String query1 = "INSERT INTO student_module_junction (student_ID, moduleID)" + "VALUES(?, ?)";
-		PreparedStatement preparedStatement1 = connectToDB().prepareStatement(query1);
-		preparedStatement1.setInt(1, student_ID);
-		preparedStatement1.setInt(2, modueleID);
-		preparedStatement1.execute();
+		preparedStatement.setInt(1, student_ID);
+		preparedStatement.setInt(2, moduleID);
+		preparedStatement.execute();
 		connectToDB().close();
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		alert.setContentText("Module added");
+		alert.setContentText("Module added to student " + studentName);
 		alert.showAndWait();
 	}
 
@@ -161,7 +151,7 @@ public class StudentTabController implements Initializable {
 		prepareStatement.execute();
 		connectToDB().close();
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		alert.setContentText("Module deleted from student "+studentName);
+		alert.setContentText("Module removed from student " + studentName);
 		alert.showAndWait();
 	}
 
@@ -196,7 +186,7 @@ public class StudentTabController implements Initializable {
 			moduleListView.add(new Module(resultSet.getInt("moduleID"), resultSet.getString("moduleCode"),
 					resultSet.getString("moduleName")));
 		}
-		studentModuleView.getItems().addAll(moduleListView);
+		studentModuleView.getItems().setAll(moduleListView);
 		connectToDB().close();
 	}
 

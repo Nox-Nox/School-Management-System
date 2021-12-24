@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Professor {
+	SimpleIntegerProperty professor_ID;
 	SimpleIntegerProperty professorID;
 	SimpleStringProperty name;
 	SimpleStringProperty surname;
@@ -14,13 +15,26 @@ public class Professor {
 	SimpleStringProperty gender;
 	SimpleObjectProperty DoB;
 
-	public Professor(Integer professorID, String name, String surname, String gender, Integer age, LocalDate DoB) {
+	public Professor(Integer professor_ID, Integer professorID, String name, String surname, String gender, Integer age, LocalDate DoB) {
+		this.professor_ID = new SimpleIntegerProperty(professor_ID);
 		this.professorID = new SimpleIntegerProperty(professorID);
 		this.name = new SimpleStringProperty(name);
 		this.surname = new SimpleStringProperty(surname);
 		this.age = new SimpleIntegerProperty(age);
 		this.gender = new SimpleStringProperty(gender);
 		this.DoB = new SimpleObjectProperty(DoB);
+	}
+
+	public int getProfessor_ID() {
+		return professor_ID.get();
+	}
+
+	public SimpleIntegerProperty professor_IDProperty() {
+		return professor_ID;
+	}
+
+	public void setProfessor_ID(int professor_ID) {
+		this.professor_ID.set(professor_ID);
 	}
 
 	public int getProfessorID() {
