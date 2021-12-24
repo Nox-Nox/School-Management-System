@@ -63,13 +63,15 @@ public class StudentTabController implements Initializable {
 			ResultSet resultSet = statement.executeQuery(query);
 
 			while (resultSet.next()) {
+
+				Integer student_id = resultSet.getInt("student_ID");
 				Integer studentid = resultSet.getInt("studentID");
 				String name = resultSet.getString("name");
 				String surname = resultSet.getString("surname");
 				Integer age = resultSet.getInt("age");
 				LocalDate date = LocalDate.parse(resultSet.getString("DoB"));
 				String gender = resultSet.getString("gender");
-				studentList.add(new Student(studentid, name, surname, gender, age, date));
+				studentList.add(new Student(student_id, studentid, name, surname, gender, age, date));
 			}
 			studentTable.setItems(studentList);
 			resultSet.close();
@@ -148,8 +150,19 @@ public class StudentTabController implements Initializable {
 		alert.showAndWait();
 	}
 
-	public void removeModule(){
-
+	public void removeModule() throws SQLException, ClassNotFoundException {
+		int moduleID = studentModuleView.getSelectionModel().getSelectedItem().getModuleID();
+		int student_ID = studentTable.getSelectionModel().getSelectedItem().getStudent_ID();
+		String studentName = studentTable.getSelectionModel().getSelectedItem().getName();
+		String query = "DELETE student_module_junction FROM student_module_junction JOIN student ON (student_module_junction.student_ID=student.student_ID) JOIN module ON (student_module_junction.moduleID=module.moduleID) WHERE student_module_junction.moduleID = ? AND student_module_junction.student_ID = ?";
+		PreparedStatement prepareStatement = connectToDB().prepareStatement(query);
+		prepareStatement.setInt(1, moduleID);
+		prepareStatement.setInt(2, student_ID);
+		prepareStatement.execute();
+		connectToDB().close();
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setContentText("Module deleted from student "+studentName);
+		alert.showAndWait();
 	}
 
 	private void getModule(int studentID) throws SQLException, ClassNotFoundException {

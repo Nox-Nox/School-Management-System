@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Student {
+	SimpleIntegerProperty student_ID;
 	SimpleIntegerProperty studentID;
 	SimpleStringProperty name;
 	SimpleStringProperty surname;
@@ -14,14 +15,26 @@ public class Student {
 	SimpleIntegerProperty age;
 	SimpleObjectProperty DoB;
 
-	public Student(Integer studentID, String name, String surname, String gender, Integer age, LocalDate DoB) {
-
+	public Student(Integer student_ID, Integer studentID, String name, String surname, String gender, Integer age, LocalDate DoB) {
+		this.student_ID = new SimpleIntegerProperty(student_ID);
 		this.studentID = new SimpleIntegerProperty(studentID);
 		this.name = new SimpleStringProperty(name);
 		this.surname = new SimpleStringProperty(surname);
 		this.gender = new SimpleStringProperty(gender);
 		this.age = new SimpleIntegerProperty(age);
 		this.DoB = new SimpleObjectProperty(DoB);
+	}
+
+	public int getStudent_ID() {
+		return student_ID.get();
+	}
+
+	public SimpleIntegerProperty student_IDProperty() {
+		return student_ID;
+	}
+
+	public void setStudent_ID(int student_ID) {
+		this.student_ID.set(student_ID);
 	}
 
 	public int getStudentID() {
