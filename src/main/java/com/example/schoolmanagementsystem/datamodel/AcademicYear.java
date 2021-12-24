@@ -2,18 +2,33 @@ package com.example.schoolmanagementsystem.datamodel;
 
 import java.time.LocalDate;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class AcademicYear {
+	SimpleIntegerProperty ttableID;
 	SimpleObjectProperty startDate;
 	SimpleObjectProperty endDate;
 	SimpleStringProperty course;
 
-	public AcademicYear(LocalDate startDate, LocalDate endDate, String course) {
+	public AcademicYear(int ttableID ,LocalDate startDate, LocalDate endDate, String course) {
+		this.ttableID = new SimpleIntegerProperty(ttableID);
 		this.startDate = new SimpleObjectProperty(startDate);
 		this.endDate = new SimpleObjectProperty(endDate);
 		this.course = new SimpleStringProperty(course);
+	}
+
+	public int getTtableID() {
+		return ttableID.get();
+	}
+
+	public SimpleIntegerProperty ttableIDProperty() {
+		return ttableID;
+	}
+
+	public void setTtableID(int ttableID) {
+		this.ttableID.set(ttableID);
 	}
 
 	public Object getStartDate() {
@@ -52,4 +67,8 @@ public class AcademicYear {
 		return course;
 	}
 
+	@Override
+	public String toString() {
+		return startDate.getValue()+ "/" + endDate.getValue();
+	}
 }

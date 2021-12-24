@@ -9,6 +9,8 @@ import java.util.*;
 import java.util.Date;
 
 import com.example.schoolmanagementsystem.DBconnect;
+import com.example.schoolmanagementsystem.datamodel.AcademicYear;
+import com.example.schoolmanagementsystem.datamodel.Course;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,16 +29,16 @@ public class AddStudentController implements Initializable {
 	private String courseNameField;
 	private Date dateField;
 	private Integer academicYearIDField;
-	private List<String> courseList = new ArrayList<>();
-	private List<String> academicList = new ArrayList<>();
+	private List<Course> courseList = new ArrayList<>();
+	private List<AcademicYear> academicList = new ArrayList<>();
 	@FXML
 	private DatePicker date;
 	@FXML
 	private ChoiceBox<String> genderOptions;
 	@FXML
-	private ChoiceBox<String> courseOptions;
+	private ChoiceBox<Course> courseOptions;
 	@FXML
-	private ChoiceBox<String> academicOptions;
+	private ChoiceBox<AcademicYear> academicOptions;
 	@FXML
 	private TextField name;
 	@FXML
@@ -50,42 +52,49 @@ public class AddStudentController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		genderOptions.getItems().addAll(genderList);
 		getCourse();
-		courseOptions.setOnAction(e -> {
-			getAcademicYear();
-			courseOptions.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
+
+		courseOptions.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if (courseOptions.getItems().isEmpty()) {
+				getCourse();
+			} else {
+				getAcademicYear();
 				academicList.clear();
 				academicOptions.getItems().clear();
 				getAcademicYear();
-			}));
+			}
 		});
 	}
 
 	private void getCourse() {
 		try {
-			String query = "SELECT DISTINCT courseName FROM course";
+			String query = "SELECT* FROM course";
 			Statement statement = connectToDB().createStatement();
 			ResultSet resultSet = statement.executeQuery(query);
 			while (resultSet.next()) {
-				courseList.add(resultSet.getString("courseName"));
+				courseList.add(new Course(resultSet.getInt("courseID"), resultSet.getString("courseCode"),
+						resultSet.getString("courseName")));
 			}
-			courseOptions.getItems().addAll(courseList);
+			courseOptions.getItems().setAll(courseList);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private void getAcademicYear() {
-		String course = courseOptions.getValue();
+		String course = courseOptions.getValue().getCourseName();
 		try {
-			String query = "SELECT tTableID, startDate, endDate FROM timetable WHERE course = ?";
+			String query = "SELECT* FROM timetable WHERE course = ?";
 			PreparedStatement prepareStatement = connectToDB().prepareStatement(query);
 			prepareStatement.setString(1, course);
 			ResultSet resultSet = prepareStatement.executeQuery();
 			while (resultSet.next()) {
-				academicList.add(resultSet.getInt("tTableID") + " " + resultSet.getDate("startDate") + "/"
-						+ resultSet.getDate("endDate"));
+				int ttableID = resultSet.getInt("tTableID");
+				LocalDate startDate = resultSet.getDate("startDate").toLocalDate();
+				LocalDate endDate = resultSet.getDate("endDate").toLocalDate();
+				String course1 = resultSet.getString("course");
+				academicList.add(new AcademicYear(ttableID, startDate, endDate, course1));
 			}
-			academicOptions.getItems().addAll(academicList);
+			academicOptions.getItems().setAll(academicList);
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -96,39 +105,36 @@ public class AddStudentController implements Initializable {
 		nameField = name.getText();
 		surnameField = surname.getText();
 		genderField = genderOptions.getValue();
-		courseNameField = courseOptions.getValue();
+		courseNameField = courseOptions.getValue().getCourseName();
 		dateField = Date.from(date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 		java.sql.Date sqlDate = new java.sql.Date(dateField.getTime());
 		LocalDate birthday = date.getValue();
 		Period period = Period.between(birthday, LocalDate.now());
 		int age = period.getYears();
-		String[] formatAcademicID = academicOptions.getValue().split(" ");
-		academicYearIDField = Integer.parseInt(formatAcademicID[0]);
+		academicYearIDField = academicOptions.getValue().getTtableID();
+		int courseID = courseOptions.getValue().getCourseID();
 
-		String query = "SELECT courseID FROM course WHERE courseName = ?";
-		PreparedStatement prepareStatement = connectToDB().prepareStatement(query);
-		prepareStatement.setString(1, courseNameField);
-		ResultSet resultSet = prepareStatement.executeQuery();
-		int courseIndex = 0;
-		if (resultSet.next()) {
-			courseIndex = resultSet.getInt("courseID");
-		}
-
-		String query1 = "INSERT INTO student (studentID, name, surname, age, DoB, gender, courseID, tTableID)"
+		String query = "INSERT INTO student (studentID, name, surname, age, DoB, gender, courseID, tTableID)"
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-		PreparedStatement prepareStmt1 = connectToDB().prepareStatement(query1);
-		prepareStmt1.setInt(1, studentIDField);
-		prepareStmt1.setString(2, nameField);
-		prepareStmt1.setString(3, surnameField);
-		prepareStmt1.setInt(4, age);
-		prepareStmt1.setDate(5, sqlDate);
-		prepareStmt1.setString(6, genderField);
-		prepareStmt1.setInt(7, courseIndex);
-		prepareStmt1.setInt(8, academicYearIDField);
-		prepareStmt1.execute();
+		PreparedStatement prepareStatement = connectToDB().prepareStatement(query);
+		prepareStatement.setInt(1, studentIDField);
+		prepareStatement.setString(2, nameField);
+		prepareStatement.setString(3, surnameField);
+		prepareStatement.setInt(4, age);
+		prepareStatement.setDate(5, sqlDate);
+		prepareStatement.setString(6, genderField);
+		prepareStatement.setInt(7, courseID);
+		prepareStatement.setInt(8, academicYearIDField);
+		prepareStatement.execute();
 		connectToDB().close();
-		Stage stage = (Stage) sceneAddStudent.getScene().getWindow();
-		stage.close();
+		studentID.clear();
+		name.clear();
+		surname.clear();
+		genderOptions.getItems().clear();
+		genderOptions.getItems().addAll(genderList);
+		courseOptions.getItems().clear();
+		academicOptions.getItems().clear();
+		date.getEditor().clear();
 	}
 
 	public void generate() throws SQLException, ClassNotFoundException {

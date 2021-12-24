@@ -183,7 +183,7 @@ public class StudentTabController implements Initializable {
 			moduleList.add(new Module(resultSet1.getInt("moduleID"), resultSet1.getString("moduleCode"),
 					resultSet1.getString("moduleName")));
 		}
-		moduleOptions.setItems(moduleList);
+		moduleOptions.getItems().setAll(moduleList);
 		connectToDB().close();
 	}
 

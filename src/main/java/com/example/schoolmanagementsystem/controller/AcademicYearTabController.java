@@ -56,10 +56,11 @@ public class AcademicYearTabController implements Initializable {
 			Statement statement = connectToDB().createStatement();
 			ResultSet resultSet = statement.executeQuery(query);
 			while (resultSet.next()) {
+				int ttableID = resultSet.getInt("tTableID");
 				LocalDate startDate = resultSet.getDate("startDate").toLocalDate();
 				LocalDate endDate = resultSet.getDate("endDate").toLocalDate();
 				String course = resultSet.getString("course");
-				academicYearList.add(new AcademicYear(startDate, endDate, course));
+				academicYearList.add(new AcademicYear(ttableID, startDate, endDate, course));
 			}
 			AcademicYearTableView.setItems(academicYearList);
 			connectToDB().close();

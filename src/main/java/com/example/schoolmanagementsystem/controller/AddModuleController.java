@@ -60,7 +60,7 @@ public class AddModuleController implements Initializable {
 			Statement statement = connectToDB().createStatement();
 			ResultSet resultSet = statement.executeQuery(query);
 			while (resultSet.next()) {
-				courseList.add(new Course(resultSet.getString("courseCode"), resultSet.getString("courseName")));
+				courseList.add(new Course(resultSet.getInt("courseID"), resultSet.getString("courseCode"), resultSet.getString("courseName")));
 			}
 			courseOptions.setItems(courseList);
 			connectToDB().close();
