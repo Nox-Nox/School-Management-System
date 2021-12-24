@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 import com.example.schoolmanagementsystem.DBconnect;
+import com.example.schoolmanagementsystem.datamodel.Module;
 import com.example.schoolmanagementsystem.datamodel.Student;
 
 import javafx.collections.FXCollections;
@@ -23,19 +22,17 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 public class StudentTabController implements Initializable {
 	private final String[] searchOption = { "StudentID", "Name", "Surname" };
 	private final ObservableList<Student> studentList = FXCollections.observableArrayList();
+	private final ObservableList<Module> moduleListView = FXCollections.observableArrayList();
 	private final FilteredList<Student> filteredList = new FilteredList<>(studentList, b -> true);
 	private final SortedList<Student> studentSortedList = new SortedList<>(filteredList);
-	private List<String> moduleList = new ArrayList<>();
+	private final ObservableList<Module> moduleList = FXCollections.observableArrayList();
 	@FXML
 	private TableView<Student> studentTable;
 	@FXML
@@ -49,36 +46,35 @@ public class StudentTabController implements Initializable {
 	@FXML
 	private ChoiceBox<String> filterStudent;
 	@FXML
-	private ChoiceBox<String> moduleOptions;
+	private ChoiceBox<Module> moduleOptions;
+	@FXML
+	private ListView<Module> studentModuleView;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-//		moduleOptions.getItems().addAll(palceholder);
 		filterStudent.getItems().addAll(searchOption);
 		studentID.setCellValueFactory(new PropertyValueFactory<>("StudentID"));
 		name.setCellValueFactory(new PropertyValueFactory<>("Name"));
 		surname.setCellValueFactory(new PropertyValueFactory<>("Surname"));
 
 		try {
-			DBconnect dbConnect = new DBconnect();
-			Connection connectDB = dbConnect.getConnection();
 			String query = "SELECT* FROM student";
-			Statement statement = connectDB.createStatement();
-			ResultSet queryOut = statement.executeQuery(query);
+			Statement statement = connectToDB().createStatement();
+			ResultSet resultSet = statement.executeQuery(query);
 
-			while (queryOut.next()) {
-				Integer studentid = queryOut.getInt("studentID");
-				String name = queryOut.getString("name");
-				String surname = queryOut.getString("surname");
-				Integer age = queryOut.getInt("age");
-				LocalDate date = LocalDate.parse(queryOut.getString("DoB"));
-				String gender = queryOut.getString("gender");
+			while (resultSet.next()) {
+				Integer studentid = resultSet.getInt("studentID");
+				String name = resultSet.getString("name");
+				String surname = resultSet.getString("surname");
+				Integer age = resultSet.getInt("age");
+				LocalDate date = LocalDate.parse(resultSet.getString("DoB"));
+				String gender = resultSet.getString("gender");
 				studentList.add(new Student(studentid, name, surname, gender, age, date));
 			}
 			studentTable.setItems(studentList);
-			queryOut.close();
+			resultSet.close();
 			statement.close();
-			connectDB.close();
+			connectToDB().close();
 
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
@@ -107,70 +103,84 @@ public class StudentTabController implements Initializable {
 				}));
 		studentSortedList.comparatorProperty().bind(studentTable.comparatorProperty());
 		studentTable.setItems(studentSortedList);
-
 		studentTable.setOnMouseClicked(e -> {
 			Student selectedRow = studentTable.getSelectionModel().selectedItemProperty().getValue();
 			int studentID = selectedRow.getStudentID();
+			try {
+				getModuleByStudentID(studentID);
+				moduleListView.clear();
+				studentModuleView.getItems().clear();
+				getModuleByStudentID(studentID);
+			} catch (SQLException | ClassNotFoundException ec) {
+				ec.printStackTrace();
+			}
 			System.out.println(studentID);
 			try {
 				getModule(studentID);
-			} catch (SQLException ex) {
-				ex.printStackTrace();
-			} catch (ClassNotFoundException ex) {
+				moduleList.clear();
+				moduleOptions.getItems().clear();
+				getModule(studentID);
+			} catch (SQLException | ClassNotFoundException ex) {
 				ex.printStackTrace();
 			}
 		});
-
 	}
 
-//	public void addModule() throws SQLException, ClassNotFoundException {
-//		Student selectedRow = studentTable.getSelectionModel().selectedItemProperty().getValue();
-//		int studentID = selectedRow.getStudentID();
-//		int student_ID = 0;
-//		int courseID = 0;
-//		DBconnect dbConnect = new DBconnect();
-//		Connection connection = dbConnect.getConnection();
-//		String query = "SELECT student_ID, courseID FROM student WHERE studentID = ?";
-//		PreparedStatement preparedStatement = connection.prepareStatement(query);
-//		preparedStatement.setInt(1, studentID);
-//		ResultSet resultSet = preparedStatement.executeQuery();
-//
-//		if (resultSet.next()) {
-//			student_ID = resultSet.getInt("student_ID");
-//			courseID = resultSet.getInt("courseID");
-//		}
-//
-//		String query1 = "SELECT  moduleID, moduleCode, moduleName from module where courseID = ?";
-//		PreparedStatement preparedStatement1 = connection.prepareStatement(query1);
-//		preparedStatement1.setInt(1, courseID);
-//		ResultSet resultSet1 = preparedStatement1.executeQuery();
-//
-//		while (resultSet1.next()){
-//			moduleList.add(new Module(resultSet1.getInt("moduleID"), resultSet1.getString("moduleCode"), resultSet1.getString("moduleName")));
-//		}
-//		moduleOptions.getItems().addAll(String.valueOf(moduleList));
-//	}
+	public void addModule() throws SQLException, ClassNotFoundException {
+		int studentID = studentTable.getSelectionModel().selectedItemProperty().getValue().getStudentID();
+		int modueleID = moduleOptions.getValue().getModuleID();
+		int student_ID = 0;
+		String query = "SELECT student_ID FROM student WHERE studentID = ?";
+		PreparedStatement preparedStatement = connectToDB().prepareStatement(query);
+		preparedStatement.setInt(1, studentID);
+		ResultSet resultSet = preparedStatement.executeQuery();
+		if (resultSet.next()) {
+			student_ID = resultSet.getInt("student_ID");
+		}
+		String query1 = "INSERT INTO student_module_junction (student_ID, moduleID)" + "VALUES(?, ?)";
+		PreparedStatement preparedStatement1 = connectToDB().prepareStatement(query1);
+		preparedStatement1.setInt(1, student_ID);
+		preparedStatement1.setInt(2, modueleID);
+		preparedStatement1.execute();
+		connectToDB().close();
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setContentText("Module added");
+		alert.showAndWait();
+	}
 
-	public void getModule(int studentID) throws SQLException, ClassNotFoundException {
+	private void getModule(int studentID) throws SQLException, ClassNotFoundException {
 		int courseID = 0;
-		DBconnect dbConnect = new DBconnect();
-		Connection connection = dbConnect.getConnection();
 		String query = "SELECT courseID FROM student WHERE studentID = ?";
-		PreparedStatement preparedStatement = connection.prepareStatement(query);
+		PreparedStatement preparedStatement = connectToDB().prepareStatement(query);
 		preparedStatement.setInt(1, studentID);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		if (resultSet.next()) {
 			courseID = resultSet.getInt("courseID");
 		}
 		String query1 = "SELECT  moduleID, moduleCode, moduleName from module where courseID = ?";
-		PreparedStatement preparedStatement1 = connection.prepareStatement(query1);
+		PreparedStatement preparedStatement1 = connectToDB().prepareStatement(query1);
 		preparedStatement1.setInt(1, courseID);
 		ResultSet resultSet1 = preparedStatement1.executeQuery();
 
 		while (resultSet1.next()) {
-			moduleList.add(resultSet1.getInt("moduleID")+" "+resultSet1.getString("moduleCode")+" "+resultSet1.getString("moduleName"));
+			moduleList.add(new Module(resultSet1.getInt("moduleID"), resultSet1.getString("moduleCode"),
+					resultSet1.getString("moduleName")));
 		}
-		moduleOptions.getItems().addAll(String.valueOf(moduleList));
+		moduleOptions.setItems(moduleList);
+		connectToDB().close();
+	}
+
+	private void getModuleByStudentID(int studentID) throws SQLException, ClassNotFoundException {
+		String query = "SELECT module.moduleID, module.moduleCode, module.moduleName FROM module JOIN student_module_junction ON (module.moduleID=student_module_junction.moduleID) JOIN student ON (student.student_ID=student_module_junction.student_ID) WHERE student.studentID = ?";
+		PreparedStatement preparedStatement = connectToDB().prepareStatement(query);
+		preparedStatement.setInt(1, studentID);
+		ResultSet resultSet = preparedStatement.executeQuery();
+		while (resultSet.next()) {
+			moduleListView.add(new Module(resultSet.getInt("moduleID"), resultSet.getString("moduleCode"),
+					resultSet.getString("moduleName")));
+		}
+		studentModuleView.getItems().addAll(moduleListView);
+		connectToDB().close();
 	}
 
 	public void reset() {
@@ -185,5 +195,11 @@ public class StudentTabController implements Initializable {
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
+	}
+
+	private Connection connectToDB() throws SQLException, ClassNotFoundException {
+		DBconnect dBconnect = new DBconnect();
+		Connection connection = dBconnect.getConnection();
+		return connection;
 	}
 }

@@ -91,14 +91,6 @@ public class AddModuleController implements Initializable {
 		}
 	}
 
-//	public void check(ActionEvent event) {
-//		getProfessor();
-//		courseOptions.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//			proList.clear();
-//			professorOptions.getItems().clear();
-//			getProfessor();
-//		});
-//	}
 
 	public void submit() throws SQLException, ClassNotFoundException {
 		moduleNameField = moduleName.getText();
@@ -112,12 +104,12 @@ public class AddModuleController implements Initializable {
 		String query = "SELECT course.courseID FROM course JOIN prof_course_junction ON (course.courseID=prof_course_junction.courseID) JOIN professor ON (professor.professor_ID=prof_course_junction.professor_ID) WHERE professorID = ?";
 		PreparedStatement prepareStmt = connectDB.prepareStatement(query);
 		prepareStmt.setString(1, prof_id);
-		ResultSet queryOut = prepareStmt.executeQuery();
+		ResultSet resultSet = prepareStmt.executeQuery();
 
-		if (queryOut.next()) {
-			courseID = queryOut.getInt("courseID");
+		if (resultSet.next()) {
+			courseID = resultSet.getInt("courseID");
 		}
-		queryOut.close();
+		resultSet.close();
 
 		String query1 = "INSERT INTO module (moduleCode, moduleName, courseID)" + "VALUES(?, ?, ?)";
 		PreparedStatement prepareSmt1 = connectDB.prepareStatement(query1);
@@ -125,7 +117,6 @@ public class AddModuleController implements Initializable {
 		prepareSmt1.setString(2, moduleNameField);
 		prepareSmt1.setInt(3, courseID);
 		prepareSmt1.execute();
-		prepareSmt1.close();
 		connectDB.close();
 		professorOptions.getItems().clear();
 		submitButton.setOnAction(e -> {
