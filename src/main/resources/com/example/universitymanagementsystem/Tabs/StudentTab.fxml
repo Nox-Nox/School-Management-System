@@ -50,7 +50,7 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <Button layoutX="735.0" layoutY="210.0" mnemonicParsing="false" onAction="#removeModule" text="Remove module" />
+      <Button layoutX="735.0" layoutY="223.0" mnemonicParsing="false" onAction="#removeModule" text="Remove module" />
       <ChoiceBox fx:id="moduleOptions" layoutX="735.0" layoutY="140.0" prefHeight="25.0" prefWidth="165.0" />
    </children>
 </AnchorPane>
