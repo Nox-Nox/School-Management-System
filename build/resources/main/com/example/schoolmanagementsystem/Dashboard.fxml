@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -19,5 +20,6 @@
       <Button fx:id="addCourse" layoutX="475.0" layoutY="535.0" mnemonicParsing="false" onAction="#addCourse" prefHeight="45.0" prefWidth="110.0" text="Add Course" />
       <Button fx:id="addProfessor" layoutX="605.0" layoutY="535.0" mnemonicParsing="false" onAction="#addProfessor" prefHeight="45.0" prefWidth="110.0" text="Add Professor" />
       <Button fx:id="addStudent" layoutX="725.0" layoutY="535.0" mnemonicParsing="false" onAction="#addStudent" prefHeight="45.0" prefWidth="110.0" text="Add Student" />
+      <PieChart fx:id="summaryPie" layoutX="14.0" layoutY="80.0" />
    </children>
 </AnchorPane>
