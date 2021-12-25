@@ -29,10 +29,10 @@ import javafx.stage.Stage;
 public class ProfessorTabController implements Initializable {
 	private final String[] searchOption = { "ProfessorID", "Name", "Surname" };
 	private final ObservableList<Professor> professorList = FXCollections.observableArrayList();
-	private final FilteredList<Professor> filteredList = new FilteredList<>(professorList, b -> true);
-	private final SortedList<Professor> professorSortedList = new SortedList<>(filteredList);
 	private final ObservableList<Course> courseListView = FXCollections.observableArrayList();
 	private final ObservableList<Course> courseList = FXCollections.observableArrayList();
+	private final FilteredList<Professor> filteredList = new FilteredList<>(professorList, b -> true);
+	private final SortedList<Professor> professorSortedList = new SortedList<>(filteredList);
 	@FXML
 	private TableView<Professor> professorTable;
 	@FXML
@@ -79,8 +79,6 @@ public class ProfessorTabController implements Initializable {
 				professorList.add(new Professor(professor_ID, professorID, name, surname, gender, age, date));
 			}
 			professorTable.setItems(professorList);
-			resultSet.close();
-			statement.close();
 			connectToDB().close();
 
 		} catch (ClassNotFoundException | SQLException e) {
@@ -137,7 +135,7 @@ public class ProfessorTabController implements Initializable {
 		connectToDB().close();
 		professorCourseView.getItems().add(selectedCourse);
 		int newSize = professorCourseView.getItems().size();
-		if (oldSize>newSize){
+		if (oldSize > newSize) {
 			professorCourseView.setItems(courseListView);
 		}
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -159,7 +157,7 @@ public class ProfessorTabController implements Initializable {
 		connectToDB().close();
 		professorCourseView.getItems().remove(indexOfCourse);
 		int newSize = professorCourseView.getItems().size();
-		if (oldSize<newSize){
+		if (oldSize < newSize) {
 			professorCourseView.setItems(courseListView);
 		}
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);

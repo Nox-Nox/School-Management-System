@@ -30,9 +30,9 @@ public class StudentTabController implements Initializable {
 	private final String[] searchOption = { "StudentID", "Name", "Surname" };
 	private final ObservableList<Student> studentList = FXCollections.observableArrayList();
 	private final ObservableList<Module> moduleListView = FXCollections.observableArrayList();
+	private final ObservableList<Module> moduleList = FXCollections.observableArrayList();
 	private final FilteredList<Student> filteredList = new FilteredList<>(studentList, b -> true);
 	private final SortedList<Student> studentSortedList = new SortedList<>(filteredList);
-	private final ObservableList<Module> moduleList = FXCollections.observableArrayList();
 	@FXML
 	private TableView<Student> studentTable;
 	@FXML

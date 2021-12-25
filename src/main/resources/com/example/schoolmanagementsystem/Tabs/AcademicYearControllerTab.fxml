@@ -9,11 +9,11 @@
 
 <AnchorPane prefHeight="592.0" prefWidth="694.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.schoolmanagementsystem.controller.AcademicYearTabController">
    <children>
-      <TableView fx:id="StudentTableView" layoutX="338.0" layoutY="48.0" prefHeight="511.0" prefWidth="227.0">
+      <TableView fx:id="studentTableView" layoutX="338.0" layoutY="48.0" prefHeight="511.0" prefWidth="227.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="StudentID" />
-          <TableColumn prefWidth="75.0" text="Name" />
-            <TableColumn prefWidth="75.0" text="Surname" />
+          <TableColumn fx:id="studentIDColumn" prefWidth="75.0" text="StudentID" />
+          <TableColumn fx:id="studentNameColumn" prefWidth="75.0" text="Name" />
+            <TableColumn fx:id="studentSurnameColumn" prefWidth="75.0" text="Surname" />
         </columns>
       </TableView>
       <Label layoutX="116.0" layoutY="14.0" text="Academic Years">
@@ -21,11 +21,9 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button layoutX="587.0" layoutY="48.0" mnemonicParsing="false" text="Add module" />
-      <Button layoutX="581.0" layoutY="142.0" mnemonicParsing="false" text="Delete Module" />
-      <Button layoutX="577.0" layoutY="93.0" mnemonicParsing="false" text="Remove student" />
-      <Button layoutX="587.0" layoutY="189.0" mnemonicParsing="false" text="Add Student" />
-      <TableView fx:id="AcademicYearTableView" layoutX="31.0" layoutY="48.0" prefHeight="511.0" prefWidth="294.0">
+      <Button layoutX="577.0" layoutY="48.0" mnemonicParsing="false" onAction="#removeStudent" text="Remove student" />
+      <Button layoutX="587.0" layoutY="85.0" mnemonicParsing="false" text="Add Student" />
+      <TableView fx:id="academicYearTableView" layoutX="31.0" layoutY="48.0" prefHeight="511.0" prefWidth="294.0">
         <columns>
           <TableColumn fx:id="startDateColumn" prefWidth="89.0" text="Start Date" />
           <TableColumn fx:id="endDateColumn" prefWidth="85.0" text="End Date" />
