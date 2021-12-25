@@ -5,10 +5,10 @@ module com.example.schoolmanagementsystem {
 
 
 
-    opens com.example.schoolmanagementsystem to javafx.fxml;
-    exports com.example.schoolmanagementsystem;
-    exports com.example.schoolmanagementsystem.datamodel;
-    opens com.example.schoolmanagementsystem.datamodel to javafx.fxml;
-    exports com.example.schoolmanagementsystem.controller;
-    opens com.example.schoolmanagementsystem.controller to javafx.fxml;
+    opens com.example.universitymanagementsystem to javafx.fxml;
+    exports com.example.universitymanagementsystem;
+    exports com.example.universitymanagementsystem.datamodel;
+    opens com.example.universitymanagementsystem.datamodel to javafx.fxml;
+    exports com.example.universitymanagementsystem.controller;
+    opens com.example.universitymanagementsystem.controller to javafx.fxml;
 }
