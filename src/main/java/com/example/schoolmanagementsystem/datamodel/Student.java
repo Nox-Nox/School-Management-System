@@ -15,7 +15,8 @@ public class Student {
 	SimpleIntegerProperty age;
 	SimpleObjectProperty DoB;
 
-	public Student(Integer student_ID, Integer studentID, String name, String surname, String gender, Integer age, LocalDate DoB) {
+	public Student(Integer student_ID, Integer studentID, String name, String surname, String gender, Integer age,
+			LocalDate DoB) {
 		this.student_ID = new SimpleIntegerProperty(student_ID);
 		this.studentID = new SimpleIntegerProperty(studentID);
 		this.name = new SimpleStringProperty(name);
@@ -29,12 +30,12 @@ public class Student {
 		return student_ID.get();
 	}
 
-	public SimpleIntegerProperty student_IDProperty() {
-		return student_ID;
-	}
-
 	public void setStudent_ID(int student_ID) {
 		this.student_ID.set(student_ID);
+	}
+
+	public SimpleIntegerProperty student_IDProperty() {
+		return student_ID;
 	}
 
 	public int getStudentID() {
@@ -101,15 +102,16 @@ public class Student {
 		return DoB.get();
 	}
 
+	public void setDoB(Object doB) {
+		this.DoB.set(doB);
+	}
+
 	public SimpleObjectProperty doBProperty() {
 		return DoB;
 	}
 
-	public void setDoB(Object doB) {
-		this.DoB.set(doB);
-	}
 	@Override
 	public String toString() {
-		return studentID + " " + name + " " + surname + " " + gender + " " + age+ " " +DoB;
+		return studentID.getValue() + "  " + name.getValue() + "  " + surname.getValue();
 	}
 }
