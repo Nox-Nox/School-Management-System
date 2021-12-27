@@ -20,6 +20,8 @@ a scene for professors with the the same layout and functionalities of the stude
 a scene for the academic year, it has 2 tableViews aand a listView, the first one displays the academic years, the second displays the students of a selected academic year,
 the listView shows a list of students without an academic year which can be filtered by course and assign the selected one to an aademic year.
 
+for data persistence a mysql DB is used
+
 requires javaFX 16
 
 
